@@ -21,8 +21,8 @@ TPscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
 
 	this.axis=new CGFaxis(this);
-    this.obj = new MyCube(this);
-
+	this.table = new MyTable(this);
+	this.floor = new MyFloor(this);
 };
 
 TPscene.prototype.initLights = function () {
@@ -33,7 +33,7 @@ TPscene.prototype.initLights = function () {
     this.lights[0].setDiffuse(1.0,0.5,1.0,1.0);
     this.lights[0].enable();
     this.lights[0].update();
-
+ 
     this.shader.unbind();
 };
 
@@ -43,7 +43,7 @@ TPscene.prototype.initCameras = function () {
 
 TPscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
-    this.setDiffuse(0.3, 0.9, 0.2, 1.0);
+    this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);	
 };
@@ -68,53 +68,18 @@ TPscene.prototype.display = function () {
 
 	this.setDefaultAppearance();
 	
-	// ---- END Background, camera and axis setup
-
-	
-	// ---- BEGIN Geometric transformation section
-
-	// NOTE: OpenGL transformation matrices are transposed
-
-	// Translate (5, 0, 2)
-	
-    var tra = [   1.0, 0.0, 0.0, 0.0,
-                  0.0, 1.0, 0.0, 0.0,
-                  0.0, 0.0, 1.0, 0.0,
-                  5.0, 0.0, 2.0, 1.0  ];
-
-	// Rotate 30 degrees around Y
-	// These constants would normally be pre-computed at initialization time
-	// they are placed here just to simplify the example
-	
-	var deg2rad=Math.PI/180.0;
-	var a_rad=30.0*deg2rad;
-	var cos_a = Math.cos(a_rad);
-	var sin_a = Math.sin(a_rad);
-
-    var rot = [ cos_a,  0.0,  -sin_a,  0.0,
-                0.0,    1.0,   0.0,    0.0,
-                sin_a,  0.0,   cos_a,  0.0,
-                0.0,    0.0,   0.0,    1.0 ];
-
-	// Scaling by (5,2,1)
-
-    var sca = [ 5.0, 0.0, 0.0, 0.0,
-                0.0, 2.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0  ];
-
-	// Multiplication of the previous transformations
-	//this.multMatrix(tra);     // GT = GT * tra
-	//this.multMatrix(rot);     // GT = GT * rot
-	//this.multMatrix(sca);     // GT = GT * sca
-
-
-	// ---- END Geometric transformation section
-	
+	// ---- END Background, camera and axis setup	
 
 	// ---- BEGIN Primitive drawing section
 
-	this.obj.display();
+	this.pushMatrix(),
+	this.translate(4, 1.75, 3);
+	this.table.display();
+	this.popMatrix();
+	this.pushMatrix();
+	this.translate(4, 0, 3);
+	this.floor.display();
+	this.popMatrix();
 	
 	// ---- END Primitive drawing section
 
