@@ -3,7 +3,8 @@
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
-function MyUnitCube(scene) {
+function MyUnitCube(scene) 
+{
 	CGFobject.call(this,scene);
 
 	this.initBuffers();
@@ -12,8 +13,8 @@ function MyUnitCube(scene) {
 MyUnitCube.prototype = Object.create(CGFobject.prototype);
 MyUnitCube.prototype.constructor=MyUnitCube;
 
-MyUnitCube.prototype.initBuffers = function () {
-
+MyUnitCube.prototype.initBuffers = function () 
+{
 this.vertices = [
             -0.5, -0.5, -0.5,
             0.5, -0.5, -0.5,
@@ -27,8 +28,7 @@ this.vertices = [
 
 	this.indices = [
 			1, 0 , 3,
-			2, 3 , 0, //face traseira
-			
+			2, 3 , 0,
 			4, 5, 6,
 			7, 6, 5,
 			7, 1, 3,

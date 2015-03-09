@@ -1,18 +1,17 @@
-
-function TPscene() {
+function TPscene() 
+{
     CGFscene.call(this);
 }
 
 TPscene.prototype = Object.create(CGFscene.prototype);
 TPscene.prototype.constructor = TPscene;
 
-TPscene.prototype.init = function (application) {
+TPscene.prototype.init = function (application) 
+{
     CGFscene.prototype.init.call(this, application);
 
     this.initCameras();
-
     this.initLights();
-
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
     this.gl.clearDepth(100.0);
@@ -20,13 +19,13 @@ TPscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.axis=new CGFaxis(this);
-	this.table = new MyTable(this);
-	this.floor = new MyFloor(this);
+	this.axis = new CGFaxis(this);
+	this.cube1 = new MyUnitCube(this);
+	this.cube2 = new MyUnitCubeQuad(this);
 };
 
-TPscene.prototype.initLights = function () {
-
+TPscene.prototype.initLights = function () 
+{
     this.shader.bind();
 
 	this.lights[0].setPosition(15, 2, 5, 1);
@@ -37,18 +36,21 @@ TPscene.prototype.initLights = function () {
     this.shader.unbind();
 };
 
-TPscene.prototype.initCameras = function () {
+TPscene.prototype.initCameras = function () 
+{
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(0, 0, 25), vec3.fromValues(0, 0, 0));
 };
 
-TPscene.prototype.setDefaultAppearance = function () {
+TPscene.prototype.setDefaultAppearance = function () 
+{
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);	
 };
 
-TPscene.prototype.display = function () {
+TPscene.prototype.display = function () 
+{
 	// ---- BEGIN Background, camera and axis setup
     this.shader.bind();
 	
@@ -65,20 +67,16 @@ TPscene.prototype.display = function () {
 
 	// Draw axis
 	this.axis.display();
-
 	this.setDefaultAppearance();
 	
 	// ---- END Background, camera and axis setup	
 
 	// ---- BEGIN Primitive drawing section
 
-	this.pushMatrix(),
-	this.translate(4, 1.75, 3);
-	this.table.display();
-	this.popMatrix();
+	this.cube1.display();
 	this.pushMatrix();
-	this.translate(4, 0, 3);
-	this.floor.display();
+	this.translate(2, 0, 0);
+	this.cube2.display();
 	this.popMatrix();
 	
 	// ---- END Primitive drawing section
