@@ -1,84 +1,67 @@
-/**
- * MyPrism
- * @constructor
- */
- function MyPrism(scene, slices, stacks) 
- {
- 	CGFobject.call(this,scene);
-	
-	this.slices = slices;
-	this.stacks = stacks;
- 	this.initBuffers();
- };
+function MyPrism(scene, slices, stacks) {
 
- MyPrism.prototype = Object.create(CGFobject.prototype);
- MyPrism.prototype.constructor = MyPrism;
+    CGFobject.call(this, scene);
 
- MyPrism.prototype.initBuffers = function() 
- {
-	this.vertices = [];
+    this.slices = slices;
+    this.stacks = stacks;
+    this.initBuffers();
+};
 
-	var ang = 0;
-	var angIncrement = (2 * Math.PI) / this.slices;
-	var stackIncrement = 1.0 / this.stacks;
+MyPrism.prototype = Object.create(CGFobject.prototype);
+MyPrism.prototype.constructor = MyPrism;
 
-	for (var i = 0; i < this.slices; i++) 
-	{
-		var x0 = Math.cos(ang);
-		var y0 = Math.sin(ang);
-		var x1 = Math.cos(ang + angIncrement);
-		var y1 = Math.sin(ang + angIncrement);
-		
-		var z = 0;
+MyPrism.prototype.initBuffers = function () {
 
-		for (var j = 0; j < this.stacks; j++)
-		{
-			this.vertices.push(x0, y0, z);
-			this.vertices.push(x0, y0, z + stackIncrement);
-			this.vertices.push(x1, y1, z);
-			this.vertices.push(x1, y1, z + stackIncrement);
+    this.vertices = [];
 
-			z += stackIncrement;
-		}
+    var ang = 0;
+    var angIncrement = (2 * Math.PI) / this.slices;
+    var stackIncrement = 1.0 / this.stacks;
 
-		ang += angIncrement;
-	}
+    this.normals = [];
 
-	this.indices = [];
+    for (var i = 0; i < this.slices; i++) {
 
-	var vertexNumber = 1;
+        var x0 = Math.cos(ang);
+        var y0 = Math.sin(ang);
+        var xn = Math.cos(ang + angIncrement / 2);
+        var yn = Math.sin(ang + angIncrement / 2);
+        var x1 = Math.cos(ang + angIncrement);
+        var y1 = Math.sin(ang + angIncrement);
+        var z = 0;
 
-	for (var i = 0; i < this.slices; i++) 
-	{
-		for (var j = 0; j < this.stacks; j++)
-		{
-			this.indices.push(vertexNumber, vertexNumber + 1, vertexNumber + 2);
-			this.indices.push(vertexNumber + 1, vertexNumber, vertexNumber - 1);		
+        for (var j = 0; j <= this.stacks; j++) {
 
-			vertexNumber += 4;	
-		}		
-	}
+            this.vertices.push(x0, y0, z);
+            this.vertices.push(x1, y1, z);
+            this.normals.push(xn, yn, 0);
+            this.normals.push(xn, yn, 0);
 
-	this.normals = [];
-	
-	ang = angIncrement / 2;
-	
-	for (var j = 0; j < this.slices; j++) 
-	{
-		var x = Math.cos(ang);
-		var y = Math.sin(ang);
+            z += stackIncrement;
+        }
 
-		for (var k = 0; k < this.stacks; k++)
-		{
-			this.normals.push(x, y, 0);
-			this.normals.push(x, y, 0);
-			this.normals.push(x, y, 0);
-			this.normals.push(x, y, 0);
-		}
-		
-		ang += angIncrement
-	}
+        ang += angIncrement;
+    }
 
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
- };
+    this.indices = [];
+
+    var vertexNumber = 2;
+
+    for (var i = 0; i < this.slices; i++) {
+
+        for (var j = 0; j < this.stacks; j++) {
+
+            this.indices.push(vertexNumber, vertexNumber - 1, vertexNumber + 1);
+            this.indices.push(vertexNumber - 1, vertexNumber, vertexNumber - 2);
+            this.indices.push(vertexNumber + 1, vertexNumber - 1, vertexNumber);
+            this.indices.push(vertexNumber, vertexNumber - 1, vertexNumber - 2);
+
+            vertexNumber += 2;
+        }
+
+        vertexNumber += 2;
+    }
+
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
+};

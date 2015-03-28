@@ -1,4 +1,4 @@
-function MyCylinder(scene, slices, stacks) {
+function MyLamp(scene, slices, stacks) {
 
     CGFobject.call(this, scene);
 
@@ -7,33 +7,35 @@ function MyCylinder(scene, slices, stacks) {
     this.initBuffers();
 };
 
-MyCylinder.prototype = Object.create(CGFobject.prototype);
-MyCylinder.prototype.constructor = MyCylinder;
+MyLamp.prototype = Object.create(CGFobject.prototype);
+MyLamp.prototype.constructor = MyLamp;
 
-MyCylinder.prototype.initBuffers = function () {
+MyLamp.prototype.initBuffers = function () {
 
     this.vertices = [];
     this.normals = [];
 
-    var theta = 0;
-    var thetaIncrement = (2 * Math.PI) / this.slices;
-    var stackIncrement = 1.0 / this.stacks;
+    var phi = 0;
+    var phiIncrement = (2 * Math.PI) / this.slices;
+    var thetaIncrement = Math.PI / (2 * this.stacks);
 
     for (var i = 0; i <= this.slices; i++) {
 
-        var x = Math.cos(theta);
-        var y = Math.sin(theta);
-        var z = 0;
+        var theta = 0;
 
         for (var j = 0; j <= this.stacks; j++) {
 
-            this.vertices.push(x, y, z);
-            this.normals.push(x, y, 0);
+            var x = Math.cos(phi) * Math.sin(theta);
+            var z = Math.sin(phi) * Math.sin(theta);
+            var y = Math.cos(theta);
 
-            z += stackIncrement;
+            this.vertices.push(x, y, z);
+            this.normals.push(x, y, z);
+
+            theta += thetaIncrement;
         }
 
-        theta += thetaIncrement;
+        phi += phiIncrement;
     }
 
     this.indices = [];

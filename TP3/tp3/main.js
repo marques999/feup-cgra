@@ -6,6 +6,7 @@ serialInclude([
 	'../lib/CGF.js',
 	'LightingScene.js',
 	'MyCylinder.js',
+	'MyLamp.js',
 	'MyPrism.js',
 
 	main=function() 
@@ -17,9 +18,7 @@ serialInclude([
 		app.init();
 		app.setScene(myScene);
 		app.setInterface(myInterface);
-
 		myInterface.setActiveCamera(myScene.camera);
-
 		app.run();
 	}
 ]);

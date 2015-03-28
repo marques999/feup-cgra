@@ -1,113 +1,98 @@
 var degToRad = Math.PI / 180.0;
 
-function LightingScene() 
-{
-	CGFscene.call(this);
+function LightingScene() {
+
+    CGFscene.call(this);
 }
 
 LightingScene.prototype = Object.create(CGFscene.prototype);
 LightingScene.prototype.constructor = LightingScene;
 
-LightingScene.prototype.init = function(application) 
-{
-	CGFscene.prototype.init.call(this, application);
+LightingScene.prototype.init = function (application) {
 
-	this.initCameras();
-	this.initLights();
+    CGFscene.prototype.init.call(this, application);
 
-	this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-	this.gl.clearDepth(100.0);
-	this.gl.enable(this.gl.DEPTH_TEST);
-	this.gl.enable(this.gl.CULL_FACE);
-	this.gl.depthFunc(this.gl.LEQUAL);
+    this.initCameras();
+    this.initLights();
 
-	this.axis = new CGFaxis(this);
-	this.cylinder = new MyCylinder(this, 8, 8);
-	this.prism = new MyPrism(this, 8, 20);
-	this.materialDefault = new CGFappearance(this);
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this.gl.clearDepth(100.0);
+    this.gl.enable(this.gl.DEPTH_TEST);
+    this.gl.enable(this.gl.CULL_FACE);
+    this.gl.depthFunc(this.gl.LEQUAL);
+
+    this.axis = new CGFaxis(this);
+    this.lamp = new MyLamp(this, 64, 64);
+    this.materialDefault = new CGFappearance(this);
 };
 
-LightingScene.prototype.initCameras = function() 
-{
-	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(10, 10, 10), vec3.fromValues(0, 0, 0));
+LightingScene.prototype.initCameras = function () {
+
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(10, 10, 10), vec3.fromValues(0, 0, 0));
 };
 
-LightingScene.prototype.initLights = function() 
-{
-	this.setGlobalAmbientLight(0, 0 ,0, 1);
-	this.shader.bind();
-	
-	// Positions for lights
-	this.lights[0].setPosition(5, 5, 5, 1);
-	this.lights[0].setVisible(true);
-	
-	this.lights[1].setPosition(-5, 5, 5, 1);
-	this.lights[1].setVisible(true);
+LightingScene.prototype.initLights = function () {
 
-	this.lights[0].setAmbient(0, 0, 0, 1);
-	this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-	this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
-	this.lights[0].enable();
+    this.setGlobalAmbientLight(0, 0, 0, 1);
+    this.shader.bind();
 
-	this.lights[1].setAmbient(0, 0, 0, 1);
-	this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
-	this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
-	this.lights[1].enable();
+    this.lights[0].setPosition(5, 5, 5, 1);
+    this.lights[0].setVisible(true);
+    this.lights[1].setPosition(-5, 5, 5, 1);
+    this.lights[1].setVisible(true);
 
-	this.shader.unbind();
+    this.lights[0].setAmbient(0, 0, 0, 1);
+    this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
+    this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
+    this.lights[0].enable();
+
+    this.lights[1].setAmbient(0, 0, 0, 1);
+    this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
+    this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
+    this.lights[1].enable();
+
+    this.shader.unbind();
 };
 
-LightingScene.prototype.updateLights = function() 
-{
-	for (i = 0; i < this.lights.length; i++)
-	{
-		this.lights[i].update();
-	}
+LightingScene.prototype.updateLights = function () {
+
+    for (i = 0; i < this.lights.length; i++) {
+
+        this.lights[i].update();
+    }
 }
 
-LightingScene.prototype.display = function() 
-{
-	this.shader.bind();
+LightingScene.prototype.display = function () {
 
-	// ---- BEGIN Background, camera and axis setup
+    this.shader.bind();
 
-	// Clear image and depth buffer everytime we update the scene
-	this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    // ---- BEGIN Background, camera and axis setup
 
-	// Initialize Model-View matrix as identity (no transformation)
-	this.updateProjectionMatrix();
-	this.loadIdentity();
+    // Clear image and depth buffer everytime we update the scene
+    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-	// Apply transformations corresponding to the camera position relative to the origin
-	this.applyViewMatrix();
+    // Initialize Model-View matrix as identity (no transformation)
+    this.updateProjectionMatrix();
+    this.loadIdentity();
 
-	// Update all lights used
-	this.updateLights();
+    // Apply transformations corresponding to the camera position relative to the origin
+    this.applyViewMatrix();
 
-	// Draw axis
-	this.axis.display();
-	this.materialDefault.apply();
+    // Update all lights used
+    this.updateLights();
 
-	// ---- END Background, camera and axis setup
+    // Draw axis
+    this.axis.display();
+    this.materialDefault.apply();
 
-	// ---- BEGIN Primitive drawing section
+    // ---- END Background, camera and axis setup
 
-	// Prism
-	this.pushMatrix();
-		this.scale(1, 1, 4);
-		this.prism.display();
-	this.popMatrix();
-	
-	this.pushMatrix();
-		this.scale(1, 4, 1);
-		this.rotate(Math.PI/2, 1, 0, 0);
-        this.translate(0.0, 0.0, -2.0);
-       
-        this.prism.display();
-    this.popMatrix();
+    // ---- BEGIN Primitive drawing section
 
-	// ---- END Primitive drawing section
+    this.lamp.display();
 
-	this.shader.unbind();
+    // ---- END Primitive drawing section
+
+    this.shader.unbind();
 };
