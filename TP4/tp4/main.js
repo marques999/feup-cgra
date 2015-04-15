@@ -9,6 +9,7 @@ serialInclude([
 	'MyUnitCubeQuad.js',
 	'MyTable.js',
 	'Plane.js', 
+	'MyCylinder.js',
 
 	main=function() 
 	{
