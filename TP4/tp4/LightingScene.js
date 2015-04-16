@@ -36,42 +36,49 @@ LightingScene.prototype.init = function(application)
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
 	this.materialDefault = new CGFappearance(this);
 	this.cylinder = new MyCylinder(this, 32, 64);
-	
+
 	this.slidesAppearance = new CGFappearance(this);
 	this.slidesAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.slidesAppearance.setDiffuse(0.8, 0.8, 0.8, 0.8);
 	this.slidesAppearance.setSpecular(0.2, 0.2, 0.2, 0.2);
-   	this.slidesAppearance.loadTexture("../resources/images/slides.png");
-   	this.slidesAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
-   	
+	this.slidesAppearance.loadTexture("../resources/images/slides.png");
+	this.slidesAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+
 	this.boardAppearance = new CGFappearance(this);
 	this.boardAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
 	this.boardAppearance.setDiffuse(0.6, 0.6, 0.6, 0.6);
 	this.boardAppearance.setSpecular(1.0, 1.0, 1.0, 0.8);
 	this.boardAppearance.setShininess(60);
-   	this.boardAppearance.loadTexture("../resources/images/board.png");
-   	this.boardAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+	this.boardAppearance.loadTexture("../resources/images/board.png");
+	this.boardAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
+	this.floorAppearance = new CGFappearance(this);
+	this.floorAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
+	this.floorAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.floorAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.floorAppearance.loadTexture("../resources/images/floor.png");
+	this.floorAppearance.setTextureWrap("REPEAT", "REPEAT");
 
+	this.pillarAppearance = new CGFappearance(this);
+	this.pillarAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
+	this.pillarAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.pillarAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.pillarAppearance.loadTexture("../resources/images/granite.png");
+	this.pillarAppearance.setTextureWrap("REPEAT", "REPEAT");
 
-   	this.floorAppearance = new CGFappearance(this);
-    this.floorAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
-    this.floorAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-    this.floorAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-    this.floorAppearance.loadTexture("../resources/images/floor.png");
-    this.floorAppearance.setTextureWrap("REPEAT", "REPEAT");
+	this.windowAppearance = new CGFappearance(this);
+	this.windowAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
+	this.windowAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.windowAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.windowAppearance.loadTexture("../resources/images/window.png");
+	this.windowAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
-   	this.windowAppearance = new CGFappearance(this);
-   	this.windowAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
-    this.windowAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-    this.windowAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-   	this.windowAppearance.loadTexture("../resources/images/window.png");
-   	this.windowAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
-
-   	this.wallAppearance = new CGFappearance(this);
-   	this.wallAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
-    this.wallAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-    this.wallAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.wallAppearance = new CGFappearance(this);
+	this.wallAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
+	this.wallAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.wallAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.wallAppearance.loadTexture("../resources/images/camo.png");
+	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
 };
 
 LightingScene.prototype.initCameras = function() 
@@ -83,10 +90,11 @@ LightingScene.prototype.initLights = function()
 {
 	this.setGlobalAmbientLight(0.0, 0.0, 0.0, 1.0);
 	this.shader.bind();
-	
+
 	this.lights[0].setPosition(4.0, 4.5, 2.0, 1.0);
 	this.lights[1].setPosition(10.5, 6.0, 1.0, 1.0);
 	this.lights[2].setPosition(1.0, 4.0, 7.5, 1.0);
+	this.lights[3].setPosition(7.5, 6.0, 25.0, 1.0);
 
 	this.lights[0].setAmbient(0.0, 0.0, 0.0, 1.0);
 	this.lights[0].setDiffuse(1.0, 1.0, 1.0, 0.8);
@@ -102,19 +110,27 @@ LightingScene.prototype.initLights = function()
 	this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
 	this.lights[2].setSpecular(1.0, 1.0, 1.0, 0.2);
 	this.lights[2].setConstantAttenuation(0.0);
-	this.lights[2].setLinearAttenuation(0.2);
+	this.lights[2].setLinearAttenuation(0.8);
 	this.lights[2].setQuadraticAttenuation(0.0);
 	this.lights[2].enable();
-	
+
+	this.lights[3].setAmbient(0.0, 0.0, 0.0, 1.0);
+	this.lights[3].setDiffuse(1.0, 1.0, 1.0, 1.0);
+	this.lights[3].setSpecular(1.0, 1.0, 1.0, 0.2);
+	this.lights[3].setConstantAttenuation(0.0);
+	this.lights[3].setLinearAttenuation(0.2);
+	this.lights[3].setQuadraticAttenuation(0.0);
+	this.lights[3].enable();
+
 	this.shader.unbind();
 };
 
 LightingScene.prototype.updateLights = function() 
 {
-    for (i = 0; i < this.lights.length; i++)
-    {
-        this.lights[i].update();
-    }
+	for (i = 0; i < this.lights.length; i++) 
+	{
+		this.lights[i].update();
+	}
 }
 
 LightingScene.prototype.display = function() 
@@ -131,7 +147,8 @@ LightingScene.prototype.display = function()
 	this.updateProjectionMatrix();
 	this.loadIdentity();
 
-	// Apply transformations corresponding to the camera position relative to the origin
+	// Apply transformations corresponding to the camera position relative to
+	// the origin
 	this.applyViewMatrix();
 
 	// Update all lights used
@@ -200,21 +217,23 @@ LightingScene.prototype.display = function()
 
 	// Left Pillar
 	this.pushMatrix();
-		this.translate(0,0,-0.5);
+		this.translate(0, 0, -0.5);
 		this.rotate(90 * degToRad, 1, 0, 0);
-		this.translate(0,0.5,0);
+		this.translate(0, 0.5, 0);
 		this.scale(1, 1, -8);
-		this.translate(2.5,12.5,0);
+		this.translate(2.5, 12.5, 0);
+		this.pillarAppearance.apply();
 		this.cylinder.display();
 	this.popMatrix();
 
 	// Right Pillar
 	this.pushMatrix();
-		this.translate(0,0,-0.5);
+		this.translate(0, 0, -0.5);
 		this.rotate(90 * degToRad, 1, 0, 0);
-		this.translate(0,0.5,0);
+		this.translate(0, 0.5, 0);
 		this.scale(1, 1, -8);
-		this.translate(12.5,12.5,0);
+		this.translate(12.5, 12.5, 0);
+		this.pillarAppearance.apply();
 		this.cylinder.display();
 	this.popMatrix();
 

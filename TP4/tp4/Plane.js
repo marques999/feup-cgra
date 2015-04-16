@@ -1,13 +1,13 @@
-function Plane(scene, nrDivs, minS, maxS, minT, maxT)
+function Plane(scene, nrDivs, minS, maxS, minT, maxT) 
 {
-	CGFobject.call(this,scene);
+	CGFobject.call(this, scene);
 
 	nrDivs = typeof nrDivs !== 'undefined' ? nrDivs : 1;
 
-    this.minS = minS || 0.0;
-   	this.maxS = maxS || 1.0;
-    this.minT = minT || 0.0;
-    this.maxT = maxT || 1.0;
+	this.minS = minS || 0.0;
+	this.maxS = maxS || 1.0;
+	this.minT = minT || 0.0;
+	this.maxT = maxT || 1.0;
 	this.nrDivs = nrDivs;
 	this.patchLength = 1.0 / nrDivs;
 	this.texelLengthS = (maxS - minS) / nrDivs;
@@ -18,7 +18,7 @@ function Plane(scene, nrDivs, minS, maxS, minT, maxT)
 Plane.prototype = Object.create(CGFobject.prototype);
 Plane.prototype.constructor = Plane;
 
-Plane.prototype.initBuffers = function ()
+Plane.prototype.initBuffers = function() 
 {
 	this.vertices = [];
 	this.normals = [];
@@ -31,7 +31,7 @@ Plane.prototype.initBuffers = function ()
 	{
 		var xCoord = -0.5;
 		var sCoord = this.minS;
-		
+
 		for (var i = 0; i <= this.nrDivs; i++) 
 		{
 			this.vertices.push(xCoord, yCoord, 0);
@@ -41,7 +41,7 @@ Plane.prototype.initBuffers = function ()
 			xCoord += this.patchLength;
 			sCoord += this.texelLengthS;
 		}
-		
+
 		yCoord -= this.patchLength;
 		tCoord += this.texelLengthT;
 	}
@@ -60,13 +60,13 @@ Plane.prototype.initBuffers = function ()
 			ind++;
 		}
 
-		if (j+1 < this.nrDivs)
+		if (j + 1 < this.nrDivs) 
 		{
-			this.indices.push(ind+this.nrDivs);
+			this.indices.push(ind + this.nrDivs);
 			this.indices.push(ind);
 		}
 	}
-	
+
 	this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
 	this.initGLBuffers();
 };
