@@ -80,6 +80,8 @@ LightingScene.prototype.init = function(application)
 	this.wallAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
 	this.wallAppearance.loadTexture("../resources/images/camo.png");
 	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
+
+	this.setUpdatePeriod(100);
 };
 
 LightingScene.prototype.initCameras = function() 
@@ -132,6 +134,11 @@ LightingScene.prototype.updateLights = function()
 	{
 		this.lights[i].update();
 	}
+}
+
+LightingScene.prototype.update = function(currTime)
+{
+	this.clock.update(currTime);
 }
 
 LightingScene.prototype.display = function() 

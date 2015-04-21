@@ -16,7 +16,7 @@ MyClockHand.prototype.display = function()
 	this.scene.rotate((90 - this.angle) * degToRad, 0, 0, 1);
 	this.scene.rotate(Math.PI / 4, 1, 0, 0);
 	this.scene.rotate(Math.PI / 2, 0, 1, 0);
-	this.scene.scale(0.02, 0.02, 0.5);
+	this.scene.scale(0.015, 0.015, 0.5);
 	this.cylinder.display();
 	this.scene.popMatrix();
 };
