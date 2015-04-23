@@ -27,7 +27,9 @@ LightingScene.prototype.init = function(application)
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
 
+	this.currentZ = 5;
 	this.axis = new CGFaxis(this);
+	this.airplane = new MyAirplane(this);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS, 0.0, 1.0, 0.0, 1.0);
 	this.floor = new MyQuad(this, 0.0, 10.0, 0, 12.0);
@@ -139,6 +141,8 @@ LightingScene.prototype.updateLights = function()
 LightingScene.prototype.update = function(currTime)
 {
 	this.clock.update(currTime);
+
+	this.currentZ -= 0.1;
 }
 
 LightingScene.prototype.display = function() 
@@ -227,6 +231,12 @@ LightingScene.prototype.display = function()
 	this.pushMatrix();
 		this.translate(7.25, 7.25, 0);
 		this.clock.display();
+	this.popMatrix();
+
+	// Airplane
+	this.pushMatrix();
+		this.translate(5, 5, this.currentZ);
+		this.airplane.display();
 	this.popMatrix();
 	
 	// Left Pillar
