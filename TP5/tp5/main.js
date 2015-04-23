@@ -6,7 +6,6 @@ serialInclude([
 	'../lib/CGF.js',
 	'LightingScene.js',
 	'MyQuad.js',
-	'MyAirPlane.js',
 	'MyUnitCubeQuad.js',
 	'MyTable.js',
 	'Plane.js', 
@@ -14,6 +13,7 @@ serialInclude([
 	'MyClockHand.js',
 	'MyClock.js',
 	'MyCylinder.js',
+	'MyAirplane.js',
 
 	main=function() 
 	{
@@ -27,5 +27,4 @@ serialInclude([
 		myInterface.setActiveCamera(myScene.camera);
 		app.run();
 	}
-
 	]);

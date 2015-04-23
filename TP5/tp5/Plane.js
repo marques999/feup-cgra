@@ -20,9 +20,10 @@ Plane.prototype.constructor = Plane;
 
 Plane.prototype.initBuffers = function() 
 {
-	this.vertices = [];
+	this.indices = [];
 	this.normals = [];
 	this.texCoords = [];
+	this.vertices = [];
 
 	var yCoord = 0.5;
 	var tCoord = this.minT;
@@ -45,8 +46,6 @@ Plane.prototype.initBuffers = function()
 		yCoord -= this.patchLength;
 		tCoord += this.texelLengthT;
 	}
-
-	this.indices = [];
 
 	var ind = 0;
 
