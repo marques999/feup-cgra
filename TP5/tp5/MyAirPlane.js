@@ -10,24 +10,14 @@ MyAirplane.prototype.constructor = MyAirplane;
 
 MyAirplane.prototype.initBuffers = function() 
 {
-	
 	this.vertices = 
 	[
-<<<<<<< HEAD
 		0.0, 0.0, 0.0,
 		-1.0, 0.0, 3.0,
 		-0.25, 0.0, 3.0,
 		0.25, 0.0, 3.0,
 		1.0, 0.0, 3.0,
 		0.0, -0.5, 3.0,
-=======
-	 	0.0, 0.0, 0.0,
-	 	-1.0, 0.0, 3.0,
-	 	-0.25, 0.0, 3.0,
-	 	0.25, 0.0, 3.0,
-	 	1.0, 0.0, 3.0,
-	 	0.0, -0.5, 3.0,
->>>>>>> origin/master
 	];
 	
 	this.indices = 
@@ -52,21 +42,6 @@ MyAirplane.prototype.initBuffers = function()
 		0, 0, -1,
 	];
 
-<<<<<<< HEAD
 	this.primitiveType = this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 };
-=======
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
-};
-
-MyAirplane.prototype.update = function()
-{
-	this.currentZ -= 0.1;
-
-	this.scene.pushMatrix();
-		this.scene.translate(this.currentX, this.currentY, this.currentZ);
-	this.scene.popMatrix();
-}
->>>>>>> origin/master
