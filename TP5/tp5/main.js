@@ -27,4 +27,4 @@ serialInclude([
 		myInterface.setActiveCamera(myScene.camera);
 		app.run();
 	}
-	]);
+]);

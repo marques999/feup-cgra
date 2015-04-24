@@ -27,7 +27,13 @@ LightingScene.prototype.init = function(application)
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.currentZ = 5;
+	this.numberFrames = 70;
+	this.animationSection = 0;
+	this.currentFrame = 0;
+	this.currentY = 9.0;
+	this.currentZ = 24.0;
+	this.currentAngle = 0
+
 	this.axis = new CGFaxis(this);
 	this.airplane = new MyAirplane(this);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
@@ -83,7 +89,7 @@ LightingScene.prototype.init = function(application)
 	this.wallAppearance.loadTexture("../resources/images/camo.png");
 	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
 
-	this.setUpdatePeriod(100);
+	this.setUpdatePeriod(1/60);
 };
 
 LightingScene.prototype.initCameras = function() 
@@ -140,9 +146,31 @@ LightingScene.prototype.updateLights = function()
 
 LightingScene.prototype.update = function(currTime)
 {
-	this.clock.update(currTime);
+	this.clock.update(currTime);	
+	this.currentFrame++;
 
-	this.currentZ -= 0.1;
+	if (this.currentFrame >= this.numberFrames && this.animationSection < 2)
+	{
+		this.animationSection++;
+		this.currentFrame = 0;
+	}
+
+	switch (this.animationSection)
+	{
+		case 0:
+			this.currentZ -= 21 / this.numberFrames;
+			this.currentAngle += Math.PI / 12 / this.numberFrames;
+			break;		
+		case 1:
+			this.currentY -= 8.5 / this.numberFrames;
+			if (this.currentAngle > -Math.PI / 2)
+				this.currentAngle -= Math.PI / 12;
+			break;
+		default:
+			this.currentZ = 6.5;
+			this.currentAngle = Math.PI;
+			break;
+	}
 }
 
 LightingScene.prototype.display = function() 
@@ -151,22 +179,12 @@ LightingScene.prototype.display = function()
 
 	// ---- BEGIN Background, camera and axis setup
 
-	// Clear image and depth buffer everytime we update the scene
 	this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-	// Initialize Model-View matrix as identity (no transformation)
 	this.updateProjectionMatrix();
 	this.loadIdentity();
-
-	// Apply transformations corresponding to the camera position relative to
-	// the origin
 	this.applyViewMatrix();
-
-	// Update all lights used
 	this.updateLights();
-
-	// Draw axis
 	this.axis.display();
 	this.materialDefault.apply();
 
@@ -235,7 +253,11 @@ LightingScene.prototype.display = function()
 
 	// Airplane
 	this.pushMatrix();
-		this.translate(5, 5, this.currentZ);
+		this.translate(-1.5,0,0);
+		this.scale(0.5, 0.5, 0.5);
+		this.rotate(Math.PI/2, 0, 1, 0);
+		this.translate(-15.0, this.currentY, this.currentZ);
+		this.rotate(this.currentAngle, 1, 0, 0);
 		this.airplane.display();
 	this.popMatrix();
 	

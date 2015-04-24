@@ -42,7 +42,9 @@ function MyClock(scene)
 
 	this.secondsIncrement = 360 / 60;
 	this.minutesIncrement = this.secondsIncrement / 60;
-	this.hoursIncrement =  this.minutesIncrement / 60;
+	this.hoursIncrement =  this.minutesIncrement / 12;
+	this.lastUpdate = 0;
+	this.updateInterval = 1000;
 };
 
 MyClock.prototype = Object.create(CGFobject.prototype);
@@ -50,35 +52,35 @@ MyClock.prototype.constructor = MyClock;
 
 MyClock.prototype.display = function() 
 {
-	// Seconds Hand
+	// ponteiro dos segundos
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.0, 0.265);
 	this.secondsAppearance.apply();
 	this.secondsHand.display();
 	this.scene.popMatrix();
 
-	// Minutes Hand
+	// ponteiro dos minutos
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.0, 0.240);
 	this.minutesAppearance.apply();
 	this.minutesHand.display();
 	this.scene.popMatrix();
 
-	// Hours Hand
+	// ponteiro das horas
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.0, 0.215);
 	this.hoursAppearance.apply();
 	this.hoursHand.display();
 	this.scene.popMatrix();
 
-	// Clock Frame
+	// moldura do relogio
 	this.scene.pushMatrix();
 	this.scene.scale(0.7, 0.7, 0.2);
 	this.frameAppearance.apply();
 	this.clockFrame.display();
 	this.scene.popMatrix();
 
-	// Clock Top
+	// frente do relogio
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.0, 0.2);
 	this.scene.scale(0.7, 0.7, 1);
@@ -89,11 +91,23 @@ MyClock.prototype.display = function()
 
 MyClock.prototype.update = function(currTime)
 {
-	var elapsedSeconds = Math.trunc(currTime / 1000) % 60;
-	var elapsedMinutes = Math.trunc(currTime / 1000 / 60) % 60;
-	var elapsedHours = Math.trunc(currTime / 1000 / 60 / 60) % 12;
+	if (this.lastUpdate == 0)
+	{
+		var elapsedSeconds = Math.round(currTime / 1000) % 60;
+		var elapsedMinutes = Math.round(currTime / 1000 / 60) % 60;
+		var elapsedHours = Math.round(currTime / 1000 / 60 / 60) % 12;
 
-	this.secondsHand.setAngle(elapsedSeconds * this.secondsIncrement);
-	this.minutesHand.setAngle(elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement);
-	this.hoursHand.setAngle(elapsedHours * (360 / 12) + (elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement) / 60);
+		this.secondsHand.setAngle(elapsedSeconds * this.secondsIncrement);
+		this.minutesHand.setAngle(elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement);
+		this.hoursHand.setAngle(elapsedHours * (360 / 12) + elapsedMinutes * this.minutesIncrement + elapsedSeconds * this.hoursIncrement);
+		this.lastUpdate = currTime;
+	}
+
+	if (currTime - this.lastUpdate >= this.updateInterval)
+	{
+		this.secondsHand.incrementAngle(this.secondsIncrement);
+		this.minutesHand.incrementAngle(this.minutesIncrement);
+		this.hoursHand.incrementAngle(this.hoursIncrement);
+		this.lastUpdate = currTime;
+	}
 }
