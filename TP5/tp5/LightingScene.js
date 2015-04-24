@@ -253,12 +253,20 @@ LightingScene.prototype.display = function()
 
 	// Airplane
 	this.pushMatrix();
+<<<<<<< HEAD
 		this.translate(-1.5,0,0);
 		this.scale(0.5, 0.5, 0.5);
 		this.rotate(Math.PI/2, 0, 1, 0);
 		this.translate(-15.0, this.currentY, this.currentZ);
 		this.rotate(this.currentAngle, 1, 0, 0);
 		this.airplane.display();
+=======
+	this.translate(0.0,0.0,-1.75);
+	this.rotate(Math.PI / 2, 0, 1, 0);
+	this.translate(-15,-0.5,4);
+	this.translate(5, 5, this.currentZ);
+	this.airplane.display();
+>>>>>>> origin/master
 	this.popMatrix();
 	
 	// Left Pillar
