@@ -235,8 +235,9 @@ LightingScene.prototype.display = function()
 
 	// Airplane
 	this.pushMatrix();
+	this.translate(0.0,0.0,-1.75);
 	this.rotate(Math.PI / 2, 0, 1, 0);
-	this.translate(-13,0,5);
+	this.translate(-15,-0.5,4);
 	this.translate(5, 5, this.currentZ);
 	this.airplane.display();
 	this.popMatrix();
