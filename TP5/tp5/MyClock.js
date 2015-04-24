@@ -6,11 +6,11 @@ function MyClock(scene)
 	this.clockFrame.initBuffers();
 	this.clockTop = new MyCircle(this.scene, 12);
 	this.clockTop.initBuffers();
-	this.secondsHand = new MyClockHand(this.scene);
+	this.secondsHand = new MyClockHand(this.scene, 0.6);
 	this.secondsHand.setAngle(270);
-	this.minutesHand = new MyClockHand(this.scene);
+	this.minutesHand = new MyClockHand(this.scene, 0.5);
 	this.minutesHand.setAngle(180);
-	this.hoursHand = new MyClockHand(this.scene);
+	this.hoursHand = new MyClockHand(this.scene, 0.35);
 	this.hoursHand.setAngle(90);
 
 	this.clockAppearance = new CGFappearance(this.scene);
@@ -40,11 +40,9 @@ function MyClock(scene)
 	this.secondsAppearance.setDiffuse(0.8, 0.9, 0.0, 1.0);
 	this.secondsAppearance.setSpecular(0.6, 0.6, 0.6, 0.2);
 
-	this.previousTime = 0;
-	this.elapsedTime = 0;
-	this.secondsIncrement = (360 / 60);
+	this.secondsIncrement = 360 / 60;
 	this.minutesIncrement = this.secondsIncrement / 60;
-	this.hoursIncrement = this.secondsIncrement / 3600;
+	this.hoursIncrement =  this.minutesIncrement / 60;
 };
 
 MyClock.prototype = Object.create(CGFobject.prototype);
@@ -54,23 +52,20 @@ MyClock.prototype.display = function()
 {
 	// Seconds Hand
 	this.scene.pushMatrix();
-	this.scene.scale(1.2, 1, 1);
-	this.scene.translate(0.0, 0.0, 0.275);
+	this.scene.translate(0.0, 0.0, 0.265);
 	this.secondsAppearance.apply();
 	this.secondsHand.display();
 	this.scene.popMatrix();
 
 	// Minutes Hand
 	this.scene.pushMatrix();
-	this.scene.scale(1.0, 1, 1);
-	this.scene.translate(0.0, 0.0, 0.245);
+	this.scene.translate(0.0, 0.0, 0.240);
 	this.minutesAppearance.apply();
 	this.minutesHand.display();
 	this.scene.popMatrix();
 
 	// Hours Hand
 	this.scene.pushMatrix();
-	this.scene.scale(1.0, 0.7, 1.0);
 	this.scene.translate(0.0, 0.0, 0.215);
 	this.hoursAppearance.apply();
 	this.hoursHand.display();
@@ -94,30 +89,11 @@ MyClock.prototype.display = function()
 
 MyClock.prototype.update = function(currTime)
 {
-	if (this.previousTime == 0)
-	{
-		var elapsedSeconds = Math.round(currTime / 1000) % 60;
-		var elapsedMinutes = Math.round(currTime / 1000 / 60) % 60;
-		var elapsedHours = Math.round(currTime / 1000 / 60 / 60) % 12;
+	var elapsedSeconds = Math.trunc(currTime / 1000) % 60;
+	var elapsedMinutes = Math.trunc(currTime / 1000 / 60) % 60;
+	var elapsedHours = Math.trunc(currTime / 1000 / 60 / 60) % 12;
 
-		this.secondsHand.setAngle(elapsedSeconds * this.secondsIncrement);
-		this.minutesHand.setAngle(elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement);
-		this.hoursHand.setAngle(elapsedHours * (360/12) + elapsedMinutes * this.minutesIncrement);
-		this.previousTime = currTime;
-	}
-
-	this.elapsedTime += (currTime - this.previousTime);
-	this.previousTime = currTime;
-	
-	if (this.elapsedTime >= 1000)
-	{
-		var elapsedSeconds = Math.round(currTime / 1000) % 60;
-		var elapsedMinutes = Math.round(currTime / 1000 / 60) % 60;
-		var elapsedHours = Math.round(currTime / 1000 / 60 / 60) % 12;
-
-		this.secondsHand.setAngle(elapsedSeconds * this.secondsIncrement);
-		this.minutesHand.setAngle(elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement);
-		this.hoursHand.setAngle(elapsedHours * (360/12) + elapsedMinutes * this.minutesIncrement);
-		this.elapsedTime = 0;
-	}
+	this.secondsHand.setAngle(elapsedSeconds * this.secondsIncrement);
+	this.minutesHand.setAngle(elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement);
+	this.hoursHand.setAngle(elapsedHours * (360 / 12) + (elapsedMinutes * this.secondsIncrement + elapsedSeconds * this.minutesIncrement) / 60);
 }

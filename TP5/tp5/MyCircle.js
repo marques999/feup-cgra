@@ -11,9 +11,10 @@ MyCircle.prototype.constructor = MyCircle;
 
 MyCircle.prototype.initBuffers = function() 
 {
-	this.vertices = [];
-	this.texCoords = [];
+	this.indices = [];
 	this.normals = [];
+	this.texCoords = [];
+	this.vertices = [];
 
 	var theta = 0;
 	var thetaIncrement = (2 * Math.PI) / this.slices;
@@ -33,9 +34,7 @@ MyCircle.prototype.initBuffers = function()
 	this.vertices.push(0, 0, 0);
 	this.texCoords.push(0.5, 0.5);
 	this.normals.push(0, 0, 1);
-
-	this.indices = [];
-
+	
 	var vertexNumber = 0;
 	var lastVertex = (this.vertices.length / 3) - 1;
 
