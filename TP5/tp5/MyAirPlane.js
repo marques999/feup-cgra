@@ -13,14 +13,15 @@ MyAirplane.prototype.constructor = MyAirplane;
 
 MyAirplane.prototype.initBuffers = function() 
 {
+	
 	this.vertices = 
 	[
-	 	-0.5, -0.5, -0.5,
-	 	-1.5, -0.5, 2.5,
-	 	-0.75, -0.5, 2.5,
-	 	-0.25, -0.5, 2.5,
-	 	0.5, -0.5, 2.5,
-	 	-0.5, -1.0, 2.5,
+	 	0.0, 0.0, 0.0,
+	 	-1.0, 0.0, 3.0,
+	 	-0.25, 0.0, 3.0,
+	 	0.25, 0.0, 3.0,
+	 	1.0, 0.0, 3.0,
+	 	0.0, -0.5, 3.0,
 	];
 	
 	this.indices = 
@@ -46,8 +47,8 @@ MyAirplane.prototype.initBuffers = function()
 
 	];
 
-	this.primitiveType = this.scene.gl.TRIANGLES;
-	this.initGLBuffers();
+ 	this.primitiveType = this.scene.gl.TRIANGLES;
+ 	this.initGLBuffers();
 };
 
 MyAirplane.prototype.update = function()
