@@ -348,7 +348,7 @@ LightingScene.prototype.display = function()
 	this.rotate(this.currentAngle, 1, 0, 0);
 	this.airplane.display();
 	this.popMatrix();
-	
+
 	// Robot
 	this.pushMatrix();
 	this.robot.draw();
