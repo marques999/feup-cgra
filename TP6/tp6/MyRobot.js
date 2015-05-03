@@ -2,10 +2,10 @@ function MyRobot(scene)
 {
 	CGFobject.call(this, scene);
 
-	this.robotAngle = 0;
-	this.robotX = 0;
-	this.robotY = 0;
-	this.robotZ = 0;
+	this.robotAngle = -5 * Math.PI / 6;
+	this.robotX = 9.0;
+	this.robotY = 0.0;
+	this.robotZ = 8.0;
 
 	this.robotAppearance = new CGFappearance(this.scene);
 	this.robotAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
