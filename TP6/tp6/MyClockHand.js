@@ -14,7 +14,7 @@ MyClockHand.prototype.constructor = MyClockHand;
 MyClockHand.prototype.display = function() 
 {
 	this.scene.pushMatrix();
-	this.scene.rotate((90 - this.angle) * degToRad, 0, 0, 1);
+	this.scene.rotate(this.angle * degToRad, 0, 0, -1);
 	this.scene.rotate(Math.PI / 4, 0, 1, 0);
 	this.scene.scale(0.015, this.size, 0.015);
 	this.cylinder.display();

@@ -47,28 +47,31 @@ MyRobot.prototype.initBuffers = function()
 
 MyRobot.prototype.move = function(p)
 {
+	var deltaX = Math.sin(this.robotAngle); 
+	var deltaZ = Math.cos(this.robotAngle);
+	
 	if (p)
 	{
-		if (this.robotX <= 12.5)
+		if (this.robotX + deltaX >= 1.0 && this.robotX + deltaX <= 14.0)
 		{
-			this.robotX += Math.sin(this.robotAngle);
+			this.robotX += deltaX;
 		}
 
-		if (this.robotZ <= 12.5)
+		if (this.robotZ + deltaZ >= 1.0 && this.robotZ + deltaZ <= 14.0)
 		{
-			this.robotZ += Math.cos(this.robotAngle);
+			this.robotZ += deltaZ;
 		}
 	}
 	else
 	{
-		if (this.robotX >= 0.5)
+		if (this.robotX - deltaX >= 0.0 && this.robotX - deltaX <= 15.0)
 		{
-			this.robotX -= Math.sin(this.robotAngle);
+			this.robotX -= deltaX;
 		}
 
-		if (this.robotZ >= 0.5)
+		if (this.robotZ - deltaZ >= 0.0 && this.robotZ - deltaZ <= 15.0)
 		{
-			this.robotZ -= Math.cos(this.robotAngle);
+			this.robotZ -= deltaZ;
 		}
 	}
 };
