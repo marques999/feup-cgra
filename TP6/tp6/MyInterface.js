@@ -11,6 +11,7 @@ MyInterface.prototype.init = function(application)
 	CGFinterface.prototype.init.call(this, application);
 	
 	this.gui = new dat.GUI();
+	this.gui.add(this.scene, 'pauseAirplane');
 	this.gui.add(this.scene, 'pauseClock');	
 	this.gui.add(this.scene, 'pauseScene');	
 	
@@ -25,11 +26,13 @@ MyInterface.prototype.init = function(application)
 	var groupScene = this.gui.addFolder("Scene");
 
 	groupScene.open();
-	groupScene.add(this.scene, 'drawTables');
-	groupScene.add(this.scene, 'drawPillars');
-	groupScene.add(this.scene, 'drawSlides');
+	groupScene.add(this.scene, 'drawAirplane');
 	groupScene.add(this.scene, 'drawBoard');
 	groupScene.add(this.scene, 'drawClock');
+	groupScene.add(this.scene, 'drawPillars');
+	groupScene.add(this.scene, 'drawRobot');
+	groupScene.add(this.scene, 'drawSlides');
+	groupScene.add(this.scene, 'drawTables');	
 	groupScene.add(this.scene, 'updateInterval', 10, 60);
 
 	return true;

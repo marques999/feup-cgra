@@ -27,18 +27,14 @@ LightingScene.prototype.init = function(application)
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.numberFrames = 70;
-	this.animationSection = 0;
-	this.currentFrame = 0;
-	this.currentY = 9.0;
-	this.currentZ = 24.0;
-	this.currentAngle = 0
-	
+	this.airplanePaused = false;
 	this.clockPaused = false; 
 	this.scenePaused = false;
+	this.drawAirplane = true;
 	this.drawClock = true;
 	this.drawTables = true;
 	this.drawPillars = true;
+	this.drawRobot = true;
 	this.drawSlides = true;
 	this.drawBoard = true;
 	this.updateInterval = 60;
@@ -105,6 +101,11 @@ LightingScene.prototype.init = function(application)
 	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
 
 	this.setUpdatePeriod(1000 / this.updateInterval);
+};
+
+LightingScene.prototype.pauseAirplane = function()
+{
+	this.airplanePaused = !this.airplanePaused;
 };
 
 LightingScene.prototype.pauseClock = function()
@@ -223,29 +224,9 @@ LightingScene.prototype.update = function(currTime)
 		this.clock.update(currTime);
 	}
 	
-	this.currentFrame++;
-
-	if (this.currentFrame >= this.numberFrames && this.animationSection < 2)
+	if (!this.airplanePaused)
 	{
-		this.animationSection++;
-		this.currentFrame = 0;
-	}
-
-	switch (this.animationSection)
-	{
-		case 0:
-			this.currentZ -= 21 / this.numberFrames;
-			this.currentAngle += Math.PI / 12 / this.numberFrames;
-			break;		
-		case 1:
-			this.currentY -= 8.5 / this.numberFrames;
-			if (this.currentAngle > -Math.PI / 2)
-				this.currentAngle -= Math.PI / 12;
-			break;
-		default:
-			this.currentZ = 6.5;
-			this.currentAngle = Math.PI;
-			break;
+		this.airplane.update();
 	}
 }
 
@@ -339,21 +320,23 @@ LightingScene.prototype.display = function()
 		this.popMatrix();
 	}
 
-	// Airplane
-	this.pushMatrix();
-	this.translate(-1.5,0,0);
-	this.scale(0.5, 0.5, 0.5);
-	this.rotate(Math.PI/2, 0, 1, 0);
-	this.translate(-15.0, this.currentY, this.currentZ);
-	this.rotate(this.currentAngle, 1, 0, 0);
-	this.airplane.display();
-	this.popMatrix();
+	if (this.drawAirplane)
+	{
+		// Airplane
+		this.pushMatrix();
+		this.airplane.draw();
+		this.airplane.display();
+		this.popMatrix();
+	}
 
-	// Robot
-	this.pushMatrix();
-	this.robot.draw();
-	this.robot.display();
-	this.popMatrix();
+	if (this.drawRobot)
+	{
+		// Robot
+		this.pushMatrix();
+		this.robot.draw();
+		this.robot.display();
+		this.popMatrix();
+	}
 	
 	if (this.drawPillars)
 	{
