@@ -11,9 +11,12 @@ serialInclude([
 	'MyClock.js',
 	'MyClockHand.js',
 	'MyCylinder.js',
+	'MyHemisphere.js',
 	'MyInterface.js',
 	'MyQuad.js',
 	'MyRobot.js',
+	'MyRobotArm.js',
+	'MyRobotWheel.js',
 	'MyTable.js',
 	'MyUnitCubeQuad.js',
 

@@ -35,6 +35,13 @@ MyInterface.prototype.init = function(application)
 	groupScene.add(this.scene, 'drawTables');	
 	groupScene.add(this.scene, 'updateInterval', 10, 60);
 
+	var groupRobot = this.gui.addFolder("Robot");
+
+	groupRobot.open();
+	groupRobot.add(this.scene, 'currentRobot', this.scene.robotAppearanceList);
+	groupRobot.add(this.scene, 'scaleRobot', 0.1, 5.0);
+	groupRobot.add(this.scene, 'armAmplitude', Math.PI / 6, Math.PI);
+	
 	return true;
 };
 
@@ -57,6 +64,12 @@ MyInterface.prototype.processKeyboard = function(event)
 			break;
 		case 58: case 100:
 			this.scene.robot.rotate(-Math.PI / 12);
+			break;
+		case 32:
+			this.scene.robot.jump();
+			break;
+		case 72: case 104:
+			this.scene.robot.greet();
 			break;
 	};
 };

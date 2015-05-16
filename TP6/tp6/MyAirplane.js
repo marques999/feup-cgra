@@ -3,14 +3,7 @@ function MyAirplane(scene)
 	CGFobject.call(this, scene);
 
 	this.initBuffers();
-	this.currentFrame = 0;
-	this.numberFrames = 70;
-	this.animationStopped = false;
-	this.animationSection = 0;
-	this.currentX = -15.0;
-	this.currentY = 9.0;
-	this.currentZ = 24.0;
-	this.currentAngle = 0.0;
+	this.reset();
 };
 
 MyAirplane.prototype = Object.create(CGFobject.prototype);

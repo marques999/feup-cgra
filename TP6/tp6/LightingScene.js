@@ -30,6 +30,9 @@ LightingScene.prototype.init = function(application)
 	this.airplanePaused = false;
 	this.clockPaused = false; 
 	this.scenePaused = false;
+	this.currentRobot = 1;
+	this.armAmplitude = Math.PI / 3;
+	this.scaleRobot = 1.0;
 	this.drawAirplane = true;
 	this.drawClock = true;
 	this.drawTables = true;
@@ -43,6 +46,11 @@ LightingScene.prototype.init = function(application)
 	this.boardLight = true;
 	this.windowLight = true;
 	this.pillarLight = true;
+
+	this.robotAppearanceList = {};
+	this.robotAppearanceList["Android"] = 0;
+	this.robotAppearanceList["R2-D2"] = 1;
+	this.robotAppearanceList["Cyanogenmod"] = 2;
     
 	this.axis = new CGFaxis(this);
 	this.airplane = new MyAirplane(this);
@@ -228,6 +236,9 @@ LightingScene.prototype.update = function(currTime)
 	{
 		this.airplane.update();
 	}
+	
+	this.robot.armAmplitude = this.armAmplitude;
+	this.robot.update();
 }
 
 LightingScene.prototype.display = function() 
@@ -333,7 +344,6 @@ LightingScene.prototype.display = function()
 	{
 		// Robot
 		this.pushMatrix();
-		this.robot.draw();
 		this.robot.display();
 		this.popMatrix();
 	}
