@@ -2,7 +2,7 @@ function MyRobotArm(scene)
 {
 	CGFobject.call(this, scene);
 
-	this.robotArm = new MyCylinder(this.scene, 12, 1);
+	this.robotArm = new MyCylinder(this.scene, 12, 12);
 	this.robotArm.initBuffers();
 	this.robotHand = new MyHemisphere(this.scene, 12, 12);
 	this.robotHand.initBuffers();
@@ -45,8 +45,6 @@ MyRobotArm.prototype.display = function()
 	this.scene.translate(0.0, -0.5, 0.0);
 	this.scene.scale(0.15, 0.15, 0.15);
 	this.scene.rotate(Math.PI, 0, 0, 1);
-
-	this.wheelAppearance.apply();
 	this.robotHand.display();
 	this.scene.popMatrix();
 };

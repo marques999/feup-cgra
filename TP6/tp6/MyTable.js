@@ -6,17 +6,17 @@ function MyTable(scene)
 	this.quad.initBuffers();
 
 	this.wood = new CGFappearance(this.scene);
-	this.wood.setAmbient(0.3, 0.3, 0.3, 1.0);
+	this.wood.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.wood.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.wood.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.wood.setSpecular(0.8, 0.8, 0.8, 0.2);
 	this.wood.setShininess(40);
 	this.wood.loadTexture("../resources/images/table.png");
 
 	this.metal = new CGFappearance(this.scene);
-	this.metal.setAmbient(0.5, 0.5, 0.5, 1.0);
-	this.metal.setDiffuse(0.4, 0.4, 0.4, 1.0);
+	this.metal.setAmbient(0.4, 0.4, 0.4, 1.0);
+	this.metal.setDiffuse(0.4, 0.4, 0.4, 0.8);
 	this.metal.setSpecular(0.6, 0.6, 0.6, 1.0);
-	this.metal.setShininess(4);
+	this.metal.setShininess(10);
 };
 
 MyTable.prototype = Object.create(CGFobject.prototype);

@@ -60,6 +60,7 @@ LightingScene.prototype.init = function(application)
 	this.table = new MyTable(this);
 	this.wallA = new MyQuad(this, -1.0, 2.0, -0.5, 1.5);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
+	this.landscape = new MyImpostor(this);
 	this.materialDefault = new CGFappearance(this);
 	this.clock = new MyClock(this);
 	this.robot = new MyRobot(this);
@@ -275,6 +276,11 @@ LightingScene.prototype.display = function()
 	this.scale(15, 8, 0.2);
 	this.windowAppearance.apply();
 	this.wallA.display();
+	this.popMatrix();
+	
+	// Landscape Impostor
+	this.pushMatrix();
+	this.landscape.display();
 	this.popMatrix();
 
 	// Plane Wall

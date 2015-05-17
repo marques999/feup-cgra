@@ -2,6 +2,13 @@ function MyAirplane(scene)
 {
 	CGFobject.call(this, scene);
 
+	this.airplaneAnimation =
+	{
+		AIRPLANE_FLYING : 0,
+		AIRPLANE_CRASH : 1,
+		AIRPLANE_FALLING : 2
+	}
+
 	this.initBuffers();
 	this.reset();
 };
@@ -20,7 +27,7 @@ MyAirplane.prototype.initBuffers = function()
 		1.0, 0.0, 3.0,
 		0.0, -0.5, 3.0,
 	];
-	
+
 	this.indices = 
 	[ 
 		0, 1, 2,
@@ -32,7 +39,7 @@ MyAirplane.prototype.initBuffers = function()
 		0, 3, 5,
 		3, 0, 5,
 	];
-	
+
 	this.normals = 
 	[ 
 		0, 0, 1,
@@ -60,7 +67,6 @@ MyAirplane.prototype.reset = function()
 {
 	this.currentFrame = 0;
 	this.numberFrames = 70;
-	this.animationStopped = false;
 	this.animationSection = 0;
 	this.currentX = -15.0;
 	this.currentY = 9.0;
@@ -78,21 +84,21 @@ MyAirplane.prototype.update = function()
 		this.currentFrame = 0;
 	}
 
-	if (this.animationSection == 0)
+	if (this.animationSection == this.airplaneAnimation.AIRPLANE_FLYING)
 	{
 		this.currentZ -= 21 / this.numberFrames;
 		this.currentAngle += Math.PI / 12 / this.numberFrames;
 	}
-	else if (this.animationSection == 1)
+	else if (this.animationSection == this.airplaneAnimation.AIRPLANE_CRASH)
 	{
 		this.currentY -= 8.5 / this.numberFrames;
-		
+
 		if (this.currentAngle > -Math.PI / 2)
 		{
 			this.currentAngle -= Math.PI / 12;
 		}	
-	}	
-	else if (this.animationSection == 2)
+	}
+	else if (this.animationSection == this.airplaneAnimation.AIRPLANE_FALLING)
 	{
 		this.currentZ = 6.5;
 		this.currentAngle = Math.PI;

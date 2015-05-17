@@ -54,22 +54,22 @@ MyInterface.prototype.processKeyboard = function(event)
 	switch (keyCode)
 	{
 		case 87: case 119:
-			this.scene.robot.move(1);
+			this.scene.robot.moveForward();
 			break;
 		case 83: case 115:
-			this.scene.robot.move(0);
+			this.scene.robot.moveBackward();
 			break;
 		case 65: case 97:
-			this.scene.robot.rotate(Math.PI / 12);
+			this.scene.robot.rotateLeft();
 			break;
-		case 58: case 100:
-			this.scene.robot.rotate(-Math.PI / 12);
+		case 68: case 100:
+			this.scene.robot.rotateRight();
 			break;
 		case 32:
-			this.scene.robot.jump();
+			this.scene.robot.robotJump = 1;
 			break;
 		case 72: case 104:
-			this.scene.robot.greet();
+			this.scene.robot.robotGreet = 1;
 			break;
 	};
 };
