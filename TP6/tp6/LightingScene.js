@@ -37,7 +37,7 @@ LightingScene.prototype.init = function(application)
 	this.drawChairs = true;
 	this.drawClock = true;
 	this.drawTables = true;
-	this.drawPillars = true;
+	this.drawColumns = true;
 	this.drawRobot = true;
 	this.drawSlides = true;
 	this.drawBoard = true;
@@ -62,19 +62,12 @@ LightingScene.prototype.init = function(application)
 	this.clock = new MyClock(this);
 	this.cylinder = new MyCylinder(this, 32, 64);
 	this.floor = new MyQuad(this, 0.0, 6.0, 0, 4.0);
+	this.robot = new MyRobot(this);
 	this.table = new MyTable(this);
 	this.wallA = new MyQuad(this, -1.0, 2.0, -0.5, 1.5);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
 	this.landscape = new MyImpostor(this);
 	this.materialDefault = new CGFappearance(this);
-	this.robot = new MyRobot(this);
-
-	this.slidesAppearance = new CGFappearance(this);
-	this.slidesAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
-	this.slidesAppearance.setDiffuse(0.8, 0.8, 0.8, 0.8);
-	this.slidesAppearance.setSpecular(0.2, 0.2, 0.2, 0.2);
-	this.slidesAppearance.loadTexture("../resources/images/slides.png");
-	this.slidesAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 	this.boardAppearance = new CGFappearance(this);
 	this.boardAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
@@ -84,19 +77,33 @@ LightingScene.prototype.init = function(application)
 	this.boardAppearance.loadTexture("../resources/images/board.png");
 	this.boardAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
+	this.columnAppearance = new CGFappearance(this);
+	this.columnAppearance.setAmbient(0.4, 0.4, 0.4, 0.6);
+	this.columnAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.columnAppearance.setSpecular(0.4, 0.4, 0.4, 0.6);
+	this.columnAppearance.loadTexture("../resources/images/column.png");
+	this.columnAppearance.setTextureWrap("REPEAT", "REPEAT");
+
 	this.floorAppearance = new CGFappearance(this);
 	this.floorAppearance.setAmbient(0.4, 0.4, 0.4, 0.5);
-	this.floorAppearance.setDiffuse(0.6, 0.6, 0.6, 0.6);
+	this.floorAppearance.setDiffuse(0.6, 0.6, 0.6, 0.5);
 	this.floorAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
 	this.floorAppearance.loadTexture("../resources/images/floor.png");
 	this.floorAppearance.setTextureWrap("REPEAT", "REPEAT");
 
-	this.pillarAppearance = new CGFappearance(this);
-	this.pillarAppearance.setAmbient(0.4, 0.4, 0.4, 0.6);
-	this.pillarAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.pillarAppearance.setSpecular(0.4, 0.4, 0.4, 0.2);
-	this.pillarAppearance.loadTexture("../resources/images/granite.png");
-	this.pillarAppearance.setTextureWrap("REPEAT", "REPEAT");
+	this.slidesAppearance = new CGFappearance(this);
+	this.slidesAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
+	this.slidesAppearance.setDiffuse(0.8, 0.8, 0.8, 0.8);
+	this.slidesAppearance.setSpecular(0.2, 0.2, 0.2, 0.2);
+	this.slidesAppearance.loadTexture("../resources/images/slides.png");
+	this.slidesAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+
+	this.wallAppearance = new CGFappearance(this);
+	this.wallAppearance.setAmbient(0.4, 0.4, 0.4, 0.6);
+	this.wallAppearance.setDiffuse(0.8, 0.8, 0.8, 0.8);
+	this.wallAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.wallAppearance.loadTexture("../resources/images/wall.png");
+	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
 
 	this.windowAppearance = new CGFappearance(this);
 	this.windowAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
@@ -105,14 +112,7 @@ LightingScene.prototype.init = function(application)
 	this.windowAppearance.loadTexture("../resources/images/window.png");
 	this.windowAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
-	this.wallAppearance = new CGFappearance(this);
-	this.wallAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
-	this.wallAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.wallAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-	this.wallAppearance.loadTexture("../resources/images/camo.png");
-	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
-
-	this.setUpdatePeriod(1000 / this.updateInterval);
+	this.setUpdatePeriod(1000.0 / this.updateInterval);
 };
 
 LightingScene.prototype.pauseAirplane = function()
@@ -145,24 +145,29 @@ LightingScene.prototype.initLights = function()
 	this.lights[2].setPosition(1.0, 4.0, 7.5, 1.0);
 	this.lights[3].setPosition(7.5, 6.0, 25.0, 1.0);
 
-	this.lights[0].setAmbient(0.0, 0.0, 0.0, 1.0);
-	this.lights[0].setDiffuse(1.0, 1.0, 1.0, 0.8);
+	// luz do projetor
+	this.lights[0].setAmbient(0.1, 0.1, 0.1, 1.0);
+	this.lights[0].setDiffuse(0.8, 0.8, 0.8, 1.0);
 	this.lights[0].setSpecular(0.4, 0.4, 0.4, 0.2);
+	this.lights[0].setLinearAttenuation(0.3);
 	this.lights[0].enable();
 
-	this.lights[1].setAmbient(0.0, 0.0, 0.0, 1.0);
-	this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
+	// luz do quadro
+	this.lights[1].setAmbient(0.1, 0.1, 0.1, 1.0);
+	this.lights[1].setDiffuse(1.0, 1.0, 1.0, 0.8);
 	this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
 	this.lights[1].enable();
 
+	// luz da janela
 	this.lights[2].setAmbient(0.0, 0.0, 0.0, 1.0);
 	this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
 	this.lights[2].setSpecular(1.0, 1.0, 1.0, 0.2);
 	this.lights[2].setConstantAttenuation(0.0);
-	this.lights[2].setLinearAttenuation(0.8);
+	this.lights[2].setLinearAttenuation(0.4);
 	this.lights[2].setQuadraticAttenuation(0.0);
 	this.lights[2].enable();
 
+	// luz de fundo
 	this.lights[3].setAmbient(0.0, 0.0, 0.0, 1.0);
 	this.lights[3].setDiffuse(1.0, 1.0, 1.0, 1.0);
 	this.lights[3].setSpecular(1.0, 1.0, 1.0, 0.2);
@@ -376,21 +381,21 @@ LightingScene.prototype.display = function()
 		this.popMatrix();
 	}
 	
-	if (this.drawPillars)
+	if (this.drawColumns)
 	{
-		// Left Pillar
+		// Left Column
 		this.pushMatrix();
 		this.scale(1, 8, 1);
 		this.translate(2.5, 0, 12.5);
-		this.pillarAppearance.apply();
+		this.columnAppearance.apply();
 		this.cylinder.display();
 		this.popMatrix();
 
-		// Right Pillar
+		// Right Column
 		this.pushMatrix();
 		this.scale(1, 8, 1);
 		this.translate(12.5, 0, 12.5);
-		this.pillarAppearance.apply();
+		this.columnAppearance.apply();
 		this.cylinder.display();
 		this.popMatrix();
 	}
