@@ -56,7 +56,7 @@ LightingScene.prototype.init = function(application)
 	this.airplane = new MyAirplane(this);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS, 0.0, 1.0, 0.0, 1.0);
-	this.floor = new MyQuad(this, 0.0, 10.0, 0, 12.0);
+	this.floor = new MyQuad(this, 0.0, 6.0, 0, 4.0);
 	this.table = new MyTable(this);
 	this.wallA = new MyQuad(this, -1.0, 2.0, -0.5, 1.5);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
@@ -82,16 +82,16 @@ LightingScene.prototype.init = function(application)
 	this.boardAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 	this.floorAppearance = new CGFappearance(this);
-	this.floorAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
-	this.floorAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.floorAppearance.setAmbient(0.4, 0.4, 0.4, 0.5);
+	this.floorAppearance.setDiffuse(0.6, 0.6, 0.6, 0.6);
 	this.floorAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
 	this.floorAppearance.loadTexture("../resources/images/floor.png");
 	this.floorAppearance.setTextureWrap("REPEAT", "REPEAT");
 
 	this.pillarAppearance = new CGFappearance(this);
-	this.pillarAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
+	this.pillarAppearance.setAmbient(0.4, 0.4, 0.4, 0.6);
 	this.pillarAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.pillarAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.pillarAppearance.setSpecular(0.4, 0.4, 0.4, 0.2);
 	this.pillarAppearance.loadTexture("../resources/images/granite.png");
 	this.pillarAppearance.setTextureWrap("REPEAT", "REPEAT");
 

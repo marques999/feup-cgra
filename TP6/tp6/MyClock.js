@@ -16,14 +16,14 @@ function MyClock(scene)
 	this.clockAppearance = new CGFappearance(this.scene);
 	this.clockAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.clockAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.clockAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.clockAppearance.setSpecular(0.8, 0.8, 0.8, 0.5);
+	this.clockAppearance.setShininess(20);
 	this.clockAppearance.loadTexture("../resources/images/clock.png");
 
 	this.frameAppearance = new CGFappearance(this.scene);
 	this.frameAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.frameAppearance.setDiffuse(0.4, 0.4, 0.4, 1.0);
 	this.frameAppearance.setSpecular(0.6, 0.6, 0.6, 1.0);
-	this.frameAppearance.setShininess(4);
 
 	this.hoursAppearance = new CGFappearance(this.scene);
 	this.hoursAppearance.setAmbient(0.5, 0.5, 0.5, 0.5);
