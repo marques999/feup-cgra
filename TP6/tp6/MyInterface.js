@@ -30,7 +30,7 @@ MyInterface.prototype.init = function(application)
 	groupScene.add(this.scene, 'drawBoard');
 	groupScene.add(this.scene, 'drawChairs');
 	groupScene.add(this.scene, 'drawClock');
-	groupScene.add(this.scene, 'drawPillars');
+	groupScene.add(this.scene, 'drawColumns');
 	groupScene.add(this.scene, 'drawRobot');
 	groupScene.add(this.scene, 'drawSlides');
 	groupScene.add(this.scene, 'drawTables');	

@@ -44,7 +44,7 @@ function MyRobot(scene)
 
 	this.robotBody = new MyCylinder(this.scene, 24, 24);
 	this.robotBody.initBuffers();
-	this.robotHead = new MyHemisphere(this.scene, 24, 24);
+	this.robotHead = new MyLamp(this.scene, 24, 24);
 	this.robotHead.initBuffers();
 	this.robotLeftArm = new MyRobotArm(this.scene);
 	this.robotLeftArm.initBuffers();

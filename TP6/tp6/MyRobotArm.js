@@ -4,7 +4,7 @@ function MyRobotArm(scene)
 
 	this.robotArm = new MyCylinder(this.scene, 12, 12);
 	this.robotArm.initBuffers();
-	this.robotHand = new MyHemisphere(this.scene, 12, 12);
+	this.robotHand = new MyLamp(this.scene, 12, 12);
 	this.robotHand.initBuffers();
 
 	this.wheelAppearance = new CGFappearance(this.scene);

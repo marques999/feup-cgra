@@ -1,4 +1,4 @@
-function MyHemisphere(scene, slices, stacks) 
+function MyLamp(scene, slices, stacks) 
 {
 	CGFobject.call(this, scene);
 
@@ -7,10 +7,10 @@ function MyHemisphere(scene, slices, stacks)
 	this.initBuffers();
 };
 
-MyHemisphere.prototype = Object.create(CGFobject.prototype);
-MyHemisphere.prototype.constructor = MyHemisphere;
+MyLamp.prototype = Object.create(CGFobject.prototype);
+MyLamp.prototype.constructor = MyLamp;
 
-MyHemisphere.prototype.initBuffers = function() 
+MyLamp.prototype.initBuffers = function() 
 {
 	this.indices = [];
 	this.normals = [];
