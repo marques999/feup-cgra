@@ -31,7 +31,7 @@ MyCylinder.prototype.initBuffers = function()
 	{
 		var x = Math.cos(theta);
 		var y = Math.sin(theta);
-		var t = this.minT;
+		var t = this.maxT;
 		var z = 0;
 
 		for (var j = 0; j <= this.stacks; j++) 
@@ -41,7 +41,7 @@ MyCylinder.prototype.initBuffers = function()
 			this.texCoords.push(s, t);
 
 			z += stackIncrement;
-			t += this.texelLengthT;
+			t -= this.texelLengthT;
 		}
 
 		theta += thetaIncrement;
