@@ -68,8 +68,8 @@ MyAirplane.prototype.reset = function()
 	this.currentFrame = 0;
 	this.numberFrames = 70;
 	this.animationSection = 0;
-	this.currentX = -15.0;
-	this.currentY = 9.0;
+	this.currentX = -16.0;
+	this.currentY = 10.0;
 	this.currentZ = 24.0;
 	this.currentAngle = 0.0;
 }

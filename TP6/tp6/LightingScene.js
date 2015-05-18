@@ -34,6 +34,7 @@ LightingScene.prototype.init = function(application)
 	this.armAmplitude = Math.PI / 3;
 	this.scaleRobot = 1.0;
 	this.drawAirplane = true;
+	this.drawChairs = true;
 	this.drawClock = true;
 	this.drawTables = true;
 	this.drawPillars = true;
@@ -54,17 +55,19 @@ LightingScene.prototype.init = function(application)
     
 	this.axis = new CGFaxis(this);
 	this.airplane = new MyAirplane(this);
+	this.ball = new MySphere(this, 16, 16);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS, 0.0, 1.0, 0.0, 1.0);
+	this.chair = new MyChair(this);
+	this.clock = new MyClock(this);
+	this.cylinder = new MyCylinder(this, 32, 64);
 	this.floor = new MyQuad(this, 0.0, 6.0, 0, 4.0);
 	this.table = new MyTable(this);
 	this.wallA = new MyQuad(this, -1.0, 2.0, -0.5, 1.5);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
 	this.landscape = new MyImpostor(this);
 	this.materialDefault = new CGFappearance(this);
-	this.clock = new MyClock(this);
 	this.robot = new MyRobot(this);
-	this.cylinder = new MyCylinder(this, 32, 64);
 
 	this.slidesAppearance = new CGFappearance(this);
 	this.slidesAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
@@ -245,9 +248,6 @@ LightingScene.prototype.update = function(currTime)
 LightingScene.prototype.display = function() 
 {
 	this.shader.bind();
-
-	// ---- BEGIN Background, camera and axis setup
-
 	this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 	this.updateProjectionMatrix();
@@ -256,9 +256,6 @@ LightingScene.prototype.display = function()
 	this.updateLights();
 	this.axis.display();
 	this.materialDefault.apply();
-
-	// ---- END Background, camera and axis setup
-	// ---- BEGIN Primitive drawing section
 
 	// Floor
 	this.pushMatrix();
@@ -278,11 +275,6 @@ LightingScene.prototype.display = function()
 	this.wallA.display();
 	this.popMatrix();
 	
-	// Landscape Impostor
-	this.pushMatrix();
-	this.landscape.display();
-	this.popMatrix();
-
 	// Plane Wall
 	this.pushMatrix();
 	this.translate(7.5, 4, 0);
@@ -290,7 +282,42 @@ LightingScene.prototype.display = function()
 	this.wallAppearance.apply();
 	this.wallB.display();
 	this.popMatrix();
+	
+	// Beach Ball
+	this.pushMatrix();
+	this.translate(1.5, 1.0, 1.5);
+	this.materialDefault.apply();
+	this.ball.display();
+	this.popMatrix();
+	
+	if (this.drawChairs)
+	{
+		// Left Chair 1
+		this.pushMatrix();
+		this.translate(12.5, 6.35, 8);
+		this.rotate(Math.PI/1.3, 1, 0, -1);
+		this.chair.display();
+		this.popMatrix();
 
+		// Left Chair 2
+		this.pushMatrix();
+		this.translate(5.0, 0, 9.85);
+		this.rotate(Math.PI, 0, 1, 0);
+		this.chair.display();
+		this.popMatrix();
+	
+		// Right Chair
+		this.pushMatrix();
+		this.translate(5.0, 0, 5.85);
+		this.chair.display();
+		this.popMatrix();
+	}
+	
+	// Landscape Impostor
+	this.pushMatrix();
+	this.landscape.display();
+	this.popMatrix();
+	
 	if (this.drawTables)
 	{
 		// First Table
@@ -308,7 +335,6 @@ LightingScene.prototype.display = function()
 
 	if (this.drawSlides)
 	{
-		// Board A
 		this.pushMatrix();
 		this.translate(4, 4.5, 0.2);
 		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
@@ -319,7 +345,6 @@ LightingScene.prototype.display = function()
 
 	if (this.drawBoard)
 	{
-		// Board B
 		this.pushMatrix();
 		this.translate(10.5, 4.5, 0.2);
 		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
@@ -330,7 +355,6 @@ LightingScene.prototype.display = function()
 	
 	if (this.drawClock)
 	{
-		// Clock
 		this.pushMatrix();
 		this.translate(7.25, 7.25, 0);
 		this.clock.display();
@@ -339,7 +363,6 @@ LightingScene.prototype.display = function()
 
 	if (this.drawAirplane)
 	{
-		// Airplane
 		this.pushMatrix();
 		this.airplane.draw();
 		this.airplane.display();
@@ -348,7 +371,6 @@ LightingScene.prototype.display = function()
 
 	if (this.drawRobot)
 	{
-		// Robot
 		this.pushMatrix();
 		this.robot.display();
 		this.popMatrix();

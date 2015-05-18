@@ -7,6 +7,7 @@ serialInclude([
 	'LightingScene.js',
 	'Plane.js',
 	'MyAirplane.js',
+	'MyChair.js',
 	'MyCircle.js',
 	'MyClock.js',
 	'MyClockHand.js',
@@ -18,6 +19,7 @@ serialInclude([
 	'MyRobot.js',
 	'MyRobotArm.js',
 	'MyRobotWheel.js',
+	'MySphere.js',
 	'MyTable.js',
 	'MyUnitCubeQuad.js',
 

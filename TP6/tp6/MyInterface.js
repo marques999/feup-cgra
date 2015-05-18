@@ -28,6 +28,7 @@ MyInterface.prototype.init = function(application)
 	groupScene.open();
 	groupScene.add(this.scene, 'drawAirplane');
 	groupScene.add(this.scene, 'drawBoard');
+	groupScene.add(this.scene, 'drawChairs');
 	groupScene.add(this.scene, 'drawClock');
 	groupScene.add(this.scene, 'drawPillars');
 	groupScene.add(this.scene, 'drawRobot');
