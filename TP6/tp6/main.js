@@ -23,7 +23,7 @@ serialInclude([
 	'MyTable.js',
 	'MyUnitCubeQuad.js',
 
-	main=function() 
+	main=function()
 	{
 		var app = new CGFapplication(document.body);
 		var myScene = new LightingScene();

@@ -34,9 +34,9 @@ function MyRobot(scene)
 	this.greetAnimation = 
 	{
 		ARM_STOP : 0,
-    	ARM_RAISE : 1,
-   	 	ARM_WAVE : 4,
-   	 	ARM_LOWER : 5,
+		ARM_RAISE : 1,
+		ARM_WAVE : 4,
+		ARM_LOWER : 5,
 	};
 
 	this.jumpAnimation = 
@@ -66,7 +66,7 @@ MyRobot.prototype.constructor = MyRobot;
 MyRobot.prototype.setTexture = function(str)
 {
 	this.robotAppearance.loadTexture(str);
-}
+};
 
 MyRobot.prototype.moveArms = function()
 {
@@ -74,7 +74,7 @@ MyRobot.prototype.moveArms = function()
 	{
 		this.leftArmAngle -= this.robotIncrement;
 		this.rightArmAngle -= this.robotIncrement;
-		
+
 		if (this.leftArmAngle <= -this.armAmplitude)
 		{
 			this.armMovement = !this.armMovement;
@@ -84,13 +84,13 @@ MyRobot.prototype.moveArms = function()
 	{
 		this.leftArmAngle += this.robotIncrement;
 		this.rightArmAngle += this.robotIncrement;
-			
+
 		if (this.leftArmAngle >= this.armAmplitude)
 		{
 			this.armMovement = !this.armMovement;
 		}
 	}
-}
+};
 
 MyRobot.prototype.move = function(dx, dz)
 {
@@ -110,21 +110,21 @@ MyRobot.prototype.move = function(dx, dz)
 	}
 
 	this.moveArms();
-}
+};
 
 MyRobot.prototype.moveForward = function()
 {
 	this.move(-Math.sin(this.robotAngle), -Math.cos(this.robotAngle));
 	this.rotateLeftWheel(true);
 	this.rotateRightWheel(true);
-}
+};
 
 MyRobot.prototype.moveBackward = function()
 {
 	this.move(Math.sin(this.robotAngle), Math.cos(this.robotAngle));
 	this.rotateLeftWheel(false);
 	this.rotateRightWheel(false);
-}
+};
 
 MyRobot.prototype.rotate = function(right)
 {
@@ -145,7 +145,7 @@ MyRobot.prototype.rotate = function(right)
 		this.rotateLeftWheel(true);
 		this.rotateRightWheel(false);
 	}
-}
+};
 
 MyRobot.prototype.rotateLeftWheel = function(forward)
 {
@@ -157,7 +157,7 @@ MyRobot.prototype.rotateLeftWheel = function(forward)
 	{
 		this.leftWheelAngle += this.robotIncrement;
 	}
-}
+};
 
 MyRobot.prototype.rotateRightWheel = function(forward)
 {
@@ -169,7 +169,7 @@ MyRobot.prototype.rotateRightWheel = function(forward)
 	{
 		this.rightWheelAngle -= this.robotIncrement;
 	}	
-}
+};
 
 MyRobot.prototype.rotateLeft = function()
 {
@@ -202,14 +202,14 @@ MyRobot.prototype.jump = function()
 	{
 		return;
 	}
-	
+
 	if (!this.robotJump)
 	{
 		this.leftArmAngle = 0.0;
 		this.rightArmAngle = 0.0;
 		this.robotJump = 1;
 	}
-}
+};
 
 MyRobot.prototype.jumpAux = function()
 {
@@ -254,7 +254,7 @@ MyRobot.prototype.jumpAux = function()
 			this.robotSpeed = 0.2
 		}
 	}
-}
+};
 
 MyRobot.prototype.greet = function()
 {
@@ -301,7 +301,7 @@ MyRobot.prototype.greet = function()
 			this.robotGreet = this.greetAnimation.ARM_STOP;
 		}
 	}
-}
+};
 
 MyRobot.prototype.draw = function()
 {
@@ -353,7 +353,7 @@ MyRobot.prototype.draw = function()
 	this.scene.rotate(this.armWaveAngle, 0, 0, 1);
 	this.robotRightArm.display();
 	this.scene.popMatrix();
-}
+};
 
 MyRobot.prototype.display = function()
 {

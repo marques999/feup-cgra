@@ -1,4 +1,4 @@
-function MyAirplane(scene) 
+function MyAirplane(scene)
 {
 	CGFobject.call(this, scene);
 
@@ -7,7 +7,7 @@ function MyAirplane(scene)
 		AIRPLANE_FLYING : 0,
 		AIRPLANE_CRASH : 1,
 		AIRPLANE_FALLING : 2
-	}
+	};
 
 	this.initBuffers();
 	this.reset();
@@ -16,9 +16,9 @@ function MyAirplane(scene)
 MyAirplane.prototype = Object.create(CGFobject.prototype);
 MyAirplane.prototype.constructor = MyAirplane;
 
-MyAirplane.prototype.initBuffers = function() 
+MyAirplane.prototype.initBuffers = function()
 {
-	this.vertices = 
+	this.vertices =
 	[
 		0.0, 0.0, 0.0,
 		-1.0, 0.0, 3.0,
@@ -28,8 +28,8 @@ MyAirplane.prototype.initBuffers = function()
 		0.0, -0.5, 3.0,
 	];
 
-	this.indices = 
-	[ 
+	this.indices =
+	[
 		0, 1, 2,
 		1, 0, 2,
 		0, 3, 4,
@@ -40,8 +40,8 @@ MyAirplane.prototype.initBuffers = function()
 		3, 0, 5,
 	];
 
-	this.normals = 
-	[ 
+	this.normals =
+	[
 		0, 0, 1,
 		0, 0, 1,
 		0, 0, 1,
@@ -61,7 +61,7 @@ MyAirplane.prototype.draw = function()
 	this.scene.rotate(Math.PI / 2, 0, 1, 0);
 	this.scene.translate(-15.0, this.currentY, this.currentZ);
 	this.scene.rotate(this.currentAngle, 1, 0, 0);
-}
+};
 
 MyAirplane.prototype.reset = function()
 {
@@ -72,7 +72,7 @@ MyAirplane.prototype.reset = function()
 	this.currentY = 10.0;
 	this.currentZ = 24.0;
 	this.currentAngle = 0.0;
-}
+};
 
 MyAirplane.prototype.update = function()
 {
@@ -107,4 +107,4 @@ MyAirplane.prototype.update = function()
 	{
 		this.reset();
 	}
-}
+};

@@ -10,11 +10,10 @@ function MyImpostor(scene)
 		new Plane(this.scene, 16, 0.5, 1.0, 0.0, 1.0)
 	];
 
-	for (var i = 0; i < 4; i++)
-	{
-		this.divisions[i].initBuffers();
-	}
-
+	this.divisions[0].initBuffers();
+	this.divisions[1].initBuffers();
+	this.divisions[2].initBuffers();
+	this.divisions[3].initBuffers();
 	this.impostorAppearance = new CGFappearance(this.scene);
 	this.impostorAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
 	this.impostorAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
@@ -26,9 +25,9 @@ function MyImpostor(scene)
 MyImpostor.prototype = Object.create(CGFobject.prototype);
 MyImpostor.prototype.constructor = MyImpostor;
 
-MyImpostor.prototype.display = function() 
+MyImpostor.prototype.display = function()
 {
-	// Left division
+	// left division
 	this.scene.pushMatrix();
 	this.scene.translate(0,4,12.5);
 	this.scene.scale(1,8,5);
@@ -37,7 +36,7 @@ MyImpostor.prototype.display = function()
 	this.impostorAppearance.apply();
 	this.scene.popMatrix();
 
-	// Upper division
+	// upper division
 	this.scene.pushMatrix()
 	this.scene.translate(0,7,7.5);
 	this.scene.scale(1,2,5);
@@ -46,7 +45,7 @@ MyImpostor.prototype.display = function()
 	this.divisions[1].display();
 	this.scene.popMatrix();
 
-	// Lower division
+	// lower division
 	this.scene.pushMatrix();
 	this.scene.translate(0,1,7.5);
 	this.scene.scale(1,2,5);
@@ -55,7 +54,7 @@ MyImpostor.prototype.display = function()
 	this.divisions[2].display();
 	this.scene.popMatrix();
 
-	// Right division
+	// right division
 	this.scene.pushMatrix();
 	this.scene.translate(0,4,2.5);
 	this.scene.scale(1,8,5);

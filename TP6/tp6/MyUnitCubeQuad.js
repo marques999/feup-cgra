@@ -9,7 +9,7 @@ function MyUnitCubeQuad(scene)
 MyUnitCubeQuad.prototype = Object.create(CGFobject.prototype);
 MyUnitCubeQuad.prototype.constructor = MyUnitCubeQuad;
 
-MyUnitCubeQuad.prototype.display = function ()
+MyUnitCubeQuad.prototype.display = function()
 {
 	// face frontal
 	this.scene.pushMatrix();

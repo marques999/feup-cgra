@@ -1,7 +1,7 @@
 function MyCircle(scene, slices, minS, maxS, minT, maxT)
 {
 	CGFobject.call(this, scene);
-	
+
 	this.slices = slices;
 	this.minS = minS || 0.0;
 	this.maxS = maxS || 1.0;

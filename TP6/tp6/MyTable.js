@@ -1,4 +1,4 @@
-function MyTable(scene) 
+function MyTable(scene)
 {
 	CGFobject.call(this, scene);
 
@@ -22,7 +22,7 @@ function MyTable(scene)
 MyTable.prototype = Object.create(CGFobject.prototype);
 MyTable.prototype.constructor = MyTable;
 
-MyTable.prototype.display = function() 
+MyTable.prototype.display = function()
 {
 	// perna posterior esquerda
 	this.scene.pushMatrix();

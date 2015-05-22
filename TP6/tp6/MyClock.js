@@ -111,4 +111,4 @@ MyClock.prototype.update = function(currTime)
 		this.hoursHand.incrementAngle(this.hoursIncrement);
 		this.lastUpdate = currTime;
 	}
-}
+};

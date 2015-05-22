@@ -13,7 +13,7 @@ function LightingScene()
 LightingScene.prototype = Object.create(CGFscene.prototype);
 LightingScene.prototype.constructor = LightingScene;
 
-LightingScene.prototype.init = function(application) 
+LightingScene.prototype.init = function(application)
 {
 	CGFscene.prototype.init.call(this, application);
 

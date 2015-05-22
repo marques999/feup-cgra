@@ -29,4 +29,4 @@ MyClockHand.prototype.setAngle = function(a)
 MyClockHand.prototype.incrementAngle = function(a)
 {
 	this.angle += a;
-}
+};
