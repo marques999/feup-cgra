@@ -2,10 +2,10 @@ function MyRobotWheel(scene)
 {
 	CGFobject.call(this, scene);
 
-	this.robotTire = new MyCylinder(this.scene, 24, 1, 0.0, 2.0, 0.0, 1.0);
-	this.robotTire.initBuffers();
 	this.robotRim = new MyCircle(this.scene, 24, 0.0, 1.0, 0.0, 0.0, 1.0);
+	this.robotTire = new MyCylinder(this.scene, 24, 1, 0.0, 2.0, 0.0, 1.0);
 	this.robotRim.initBuffers();
+	this.robotTire.initBuffers();
 
 	this.tireAppearance = new CGFappearance(this.scene);
 	this.tireAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);

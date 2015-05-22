@@ -1,10 +1,10 @@
-function MyRobotArm(scene) 
+function MyRobotArm(scene)
 {
 	CGFobject.call(this, scene);
 
 	this.robotArm = new MyCylinder(this.scene, 12, 12);
-	this.robotArm.initBuffers();
 	this.robotHand = new MyLamp(this.scene, 12, 12);
+	this.robotArm.initBuffers();
 	this.robotHand.initBuffers();
 
 	this.handAppearance = new CGFappearance(this.scene);
@@ -22,7 +22,7 @@ function MyRobotArm(scene)
 MyRobotArm.prototype = Object.create(CGFobject.prototype);
 MyRobotArm.prototype.constructor = MyRobotArm;
 
-MyRobotArm.prototype.display = function() 
+MyRobotArm.prototype.display = function()
 {
 	// moldura da roda
 	this.scene.pushMatrix();

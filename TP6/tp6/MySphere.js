@@ -1,4 +1,4 @@
-function MySphere(scene, slices, stacks) 
+function MySphere(scene, slices, stacks)
 {
 	CGFobject.call(this, scene);
 
@@ -10,7 +10,7 @@ function MySphere(scene, slices, stacks)
 MySphere.prototype = Object.create(CGFobject.prototype);
 MySphere.prototype.constructor = MySphere;
 
-MySphere.prototype.initBuffers = function() 
+MySphere.prototype.initBuffers = function()
 {
 	this.indices = [];
 	this.normals = [];
