@@ -25,7 +25,7 @@ MyCylinder.prototype.initBuffers = function()
 	var theta = 0;
 	var thetaIncrement = (2 * Math.PI) / this.slices;
 	var stackIncrement = 1.0 / this.stacks;
-	var s = this.minS;
+	var s = this.maxS;
 
 	for (var i = 0; i <= this.slices; i++) 
 	{
@@ -45,7 +45,7 @@ MyCylinder.prototype.initBuffers = function()
 		}
 
 		theta += thetaIncrement;
-		s += this.texelLengthS;
+		s -= this.texelLengthS;
 	}
 
 	this.indices = [];

@@ -17,8 +17,8 @@ function MyClock(scene)
 	this.clockAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.clockAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
 	this.clockAppearance.setSpecular(0.8, 0.8, 0.8, 0.5);
-	this.clockAppearance.setShininess(20);
 	this.clockAppearance.loadTexture("../resources/images/clock.png");
+	this.clockAppearance.setShininess(20);
 
 	this.frameAppearance = new CGFappearance(this.scene);
 	this.frameAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);

@@ -2,49 +2,53 @@ function MyRobot(scene)
 {
 	CGFobject.call(this, scene);
 
-	this.robotAngle = 0;
-	this.robotIncrement = Math.PI / 12;
 	this.robotX = 8.5;
 	this.robotY = 0.0;
 	this.robotZ = 8.0;
-	this.robotScale = 1.0;
+	this.robotAngle = 0.0;
 	this.robotGreet = 0;
+	this.robotIncrement = Math.PI / 12;
 	this.robotJump = 0;
+	this.robotScale = 1.0;
 	this.robotSpeed = 0.2;
-	
+
 	this.leftArmAngle = 0;
 	this.rightArmAngle = 0;
 	this.leftWheelAngle = 0;
 	this.rightWheelAngle = 0;
-	
-	this.waveAngle = 0;
-	this.waveIncrement = Math.PI / 12;
+
+	this.armIncrement = Math.PI / 24;
 	this.armAmplitude = Math.PI / 3;
 	this.armMovement = 0;
+	this.armRaiseAmplitude = Math.PI;
+	this.armWaveAmplitude = Math.PI / 2;
+	this.armWaveIncrement = Math.PI / 12;
+	this.armWaveAngle = 0.0;
 
 	this.robotAppearance = new CGFappearance(this.scene);
 	this.robotAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
-	this.robotAppearance.setDiffuse(0.9, 0.4, 0.0, 1.0);
+	this.robotAppearance.setDiffuse(0.9, 0.9, 0.9, 1.0);
 	this.robotAppearance.setSpecular(0.6, 0.6, 0.6, 1.0);
 	this.robotAppearance.setShininess(60);
 
-	this.bodyAppearance = new CGFappearance(this.scene);
-	this.bodyAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
-	this.bodyAppearance.setDiffuse(0.9, 0.9, 0.9, 1.0);
-	this.bodyAppearance.setSpecular(0.6, 0.6, 0.6, 1.0);
-	this.bodyAppearance.setShininess(60);
-	this.bodyAppearance.loadTexture("../resources/images/cyanogen_body.png");
-
-	this.robotAnimation = 
+	this.greetAnimation = 
 	{
+		ARM_STOP : 0,
     	ARM_RAISE : 1,
    	 	ARM_WAVE : 4,
-   	 	ARM_LOWER : 5
-	}
+   	 	ARM_LOWER : 5,
+	};
 
-	this.robotBody = new MyCylinder(this.scene, 24, 24);
+	this.jumpAnimation = 
+	{
+		JUMP_STOP : 0,
+		JUMP_UP : 1,
+		JUMP_DOWN : 2,
+	};
+
+	this.robotBody = new MyCylinder(this.scene, 24, 24, 0.0, 1.0, 0.5, 1.0);
 	this.robotBody.initBuffers();
-	this.robotHead = new MyLamp(this.scene, 24, 24);
+	this.robotHead = new MyLamp(this.scene, 24, 24, 0.0, 1.0, 0.0, 0.5);
 	this.robotHead.initBuffers();
 	this.robotLeftArm = new MyRobotArm(this.scene);
 	this.robotLeftArm.initBuffers();
@@ -59,13 +63,9 @@ function MyRobot(scene)
 MyRobot.prototype = Object.create(CGFobject.prototype);
 MyRobot.prototype.constructor = MyRobot;
 
-MyRobot.prototype.loadTextures = function()
+MyRobot.prototype.setTexture = function(str)
 {
-	if (this.reloadTextures)
-	{
-		this.bodyAppearance.loadTexture(this.scene.robotBodyTexture);
-		this.reloadTextures = false;
-	}
+	this.robotAppearance.loadTexture(str);
 }
 
 MyRobot.prototype.moveArms = function()
@@ -94,7 +94,7 @@ MyRobot.prototype.moveArms = function()
 
 MyRobot.prototype.move = function(dx, dz)
 {
-	if (this.robotGreet)
+	if (this.robotGreet || this.robotJump)
 	{
 		return;
 	}
@@ -115,35 +115,70 @@ MyRobot.prototype.move = function(dx, dz)
 MyRobot.prototype.moveForward = function()
 {
 	this.move(-Math.sin(this.robotAngle), -Math.cos(this.robotAngle));
+	this.rotateLeftWheel(true);
+	this.rotateRightWheel(true);
 }
 
 MyRobot.prototype.moveBackward = function()
 {
 	this.move(Math.sin(this.robotAngle), Math.cos(this.robotAngle));
+	this.rotateLeftWheel(false);
+	this.rotateRightWheel(false);
 }
 
-MyRobot.prototype.rotateLeft = function()
+MyRobot.prototype.rotate = function(right)
 {
-	if (this.robotGreet)
+	if (this.robotGreet || this.robotJump)
 	{
 		return;
 	}
 	
-	this.robotAngle += this.robotIncrement;
-	this.rightWheelAngle -= Math.PI / 24;
-	this.leftWheelAngle += Math.PI / 24;
+	if (right)
+	{
+		this.robotAngle -= this.robotIncrement;
+		this.rotateLeftWheel(false);
+		this.rotateRightWheel(true);
+	}
+	else
+	{
+		this.robotAngle += this.robotIncrement;
+		this.rotateLeftWheel(true);
+		this.rotateRightWheel(false);
+	}
+}
+
+MyRobot.prototype.rotateLeftWheel = function(forward)
+{
+	if (forward)
+	{
+		this.leftWheelAngle -= this.robotIncrement;
+	}
+	else
+	{
+		this.leftWheelAngle += this.robotIncrement;
+	}
+}
+
+MyRobot.prototype.rotateRightWheel = function(forward)
+{
+	if (forward)
+	{
+		this.rightWheelAngle += this.robotIncrement;
+	}
+	else
+	{
+		this.rightWheelAngle -= this.robotIncrement;
+	}	
+}
+
+MyRobot.prototype.rotateLeft = function()
+{
+	this.rotate(false);
 };
 
 MyRobot.prototype.rotateRight = function()
 {
-	if (this.robotGreet)
-	{
-		return;
-	}
-
-	this.robotAngle -= this.robotIncrement;
-	this.rightWheelAngle += Math.PI / 24;
-	this.leftWheelAngle -= Math.PI / 24;
+	this.rotate(true);
 }
 
 MyRobot.prototype.update = function()
@@ -152,7 +187,7 @@ MyRobot.prototype.update = function()
 
 	if (this.robotJump)
 	{
-		this.jump();
+		this.jumpAux();
 	}
 
 	if (this.robotGreet)
@@ -163,32 +198,69 @@ MyRobot.prototype.update = function()
 
 MyRobot.prototype.jump = function()
 {
-	if (this.robotY >= 3.0)
+	if (this.robotGreet)
 	{
-		this.robotSpeed = -0.2;
-		this.robotY = 3.0;
-	} 
-	else if (this.robotY < 0.0)
-	{
-		this.robotSpeed = 0.2;
-		this.robotY = 0.0;
-		this.robotJump = 0;
+		return;
 	}
-	else
+	
+	if (!this.robotJump)
 	{
-		this.robotSpeed -= 0.01;
-		this.robotY += this.robotSpeed;
+		this.leftArmAngle = 0.0;
+		this.rightArmAngle = 0.0;
+		this.robotJump = 1;
+	}
+}
+
+MyRobot.prototype.jumpAux = function()
+{
+	if (this.robotJump == this.jumpAnimation.JUMP_UP)
+	{
+		if (this.robotY < 3.0)
+		{	
+			this.robotSpeed -= 0.005;
+			this.robotY += this.robotSpeed;
+			
+			if (this.rightArmAngle < this.armRaiseAmplitude)
+			{
+				this.leftArmAngle -= this.armIncrement;
+				this.rightArmAngle += this.armIncrement;
+			}
+		}
+		else
+		{
+			this.robotSpeed = -this.robotSpeed;
+			this.robotJump = this.jumpAnimation.JUMP_DOWN;
+		}	 
+	}
+	else if (this.robotJump == this.jumpAnimation.JUMP_DOWN)
+	{
+		if (this.robotY > 0.0)
+		{
+			this.robotSpeed += 0.01;
+			this.robotY -= this.robotSpeed;
+
+			if (this.rightArmAngle > 0.0)
+			{
+				this.leftArmAngle += this.armIncrement;
+				this.rightArmAngle -= this.armIncrement;
+			}
+		}
+		else
+		{
+			this.robotJump = this.jumpAnimation.JUMP_STOP;
+			this.leftArmAngle = 0.0;
+			this.rightArmAngle = 0.0;
+			this.robotY = 0.0;
+			this.robotSpeed = 0.2
+		}
 	}
 }
 
 MyRobot.prototype.greet = function()
 {
-	var maxRaiseAmplitude = Math.PI;
-	var maxWaveAmplitude = Math.PI / 2;
-
-	if (this.robotGreet == this.robotAnimation.ARM_RAISE)
+	if (this.robotGreet == this.greetAnimation.ARM_RAISE)
 	{
-		if (this.rightArmAngle <= maxRaiseAmplitude)
+		if (this.rightArmAngle <= this.armRaiseAmplitude)
 		{
 			this.rightArmAngle += this.robotIncrement;
 		}
@@ -197,25 +269,25 @@ MyRobot.prototype.greet = function()
 			this.robotGreet++;
 		}
 	}
-	else if (this.robotGreet <= this.robotAnimation.ARM_WAVE)
+	else if (this.robotGreet <= this.greetAnimation.ARM_WAVE)
 	{
-		if (this.waveAngle > maxWaveAmplitude)
+		if (this.armWaveAngle > this.armWaveAmplitude)
 		{
-			this.waveAngle = maxWaveAmplitude;
-			this.waveIncrement = -this.waveIncrement;
+			this.armWaveAngle = this.armWaveAmplitude;
+			this.armWaveIncrement = -this.armWaveIncrement;
 		} 
-		else if (this.waveAngle < 0.0)
+		else if (this.armWaveAngle < 0.0)
 		{
-			this.waveAngle = 0.0;
-			this.waveIncrement = -this.waveIncrement;
+			this.armWaveAngle = 0.0;
+			this.armWaveIncrement = -this.armWaveIncrement;
 			this.robotGreet++;
 		}
 		else
 		{
-			this.waveAngle += this.waveIncrement;
+			this.armWaveAngle += this.armWaveIncrement;
 		}
 	}
-	else if (this.robotGreet == this.robotAnimation.ARM_LOWER)
+	else if (this.robotGreet == this.greetAnimation.ARM_LOWER)
 	{
 		if (this.rightArmAngle > 0.0)
 		{
@@ -223,15 +295,11 @@ MyRobot.prototype.greet = function()
 		}
 		else
 		{
-			this.robotGreet = 0;
+			this.rightArmAngle = 0.0;
+			this.armWaveAngle = 0.0;
+			this.armWaveIncrement = Math.PI / 12;
+			this.robotGreet = this.greetAnimation.ARM_STOP;
 		}
-	}
-	else
-	{
-		this.waveAngle = 0.0;
-		this.waveIncrement = Math.PI / 12;
-		this.rightArmAngle = 0.0;
-		this.robotGreet = 0;
 	}
 }
 
@@ -241,7 +309,7 @@ MyRobot.prototype.draw = function()
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.25, 0.0);
 	this.scene.scale(0.7, 1.25, 0.7);
-	this.bodyAppearance.apply();
+	this.robotAppearance.apply();
 	this.robotBody.display();
 	this.scene.popMatrix();
 
@@ -249,6 +317,7 @@ MyRobot.prototype.draw = function()
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 1.5, 0.0);
 	this.scene.scale(0.7, 0.6, 0.7);
+	this.robotAppearance.apply();
 	this.robotHead.display(),
 	this.scene.popMatrix();
 
@@ -281,7 +350,7 @@ MyRobot.prototype.draw = function()
 	this.scene.pushMatrix();
 	this.scene.translate(0.75, 1.5, 0.0);
 	this.scene.rotate(this.rightArmAngle, 1, 0, 0);
-	this.scene.rotate(this.waveAngle, 0, 0, 1);
+	this.scene.rotate(this.armWaveAngle, 0, 0, 1);
 	this.robotRightArm.display();
 	this.scene.popMatrix();
 }
@@ -291,6 +360,5 @@ MyRobot.prototype.display = function()
 	this.scene.translate(this.robotX, this.robotY, this.robotZ);
 	this.scene.rotate(this.robotAngle, 0, 1, 0);
 	this.scene.scale(this.robotScale, this.robotScale, this.robotScale);
-	this.robotAppearance.apply();
 	this.draw();
 };

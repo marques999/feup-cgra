@@ -67,7 +67,7 @@ MyInterface.prototype.processKeyboard = function(event)
 			this.scene.robot.rotateRight();
 			break;
 		case 32:
-			this.scene.robot.robotJump = 1;
+			this.scene.robot.jump();
 			break;
 		case 72: case 104:
 			this.scene.robot.robotGreet = 1;

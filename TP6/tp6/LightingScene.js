@@ -30,7 +30,6 @@ LightingScene.prototype.init = function(application)
 	this.airplanePaused = false;
 	this.clockPaused = false; 
 	this.scenePaused = false;
-	this.currentRobot = 1;
 	this.armAmplitude = Math.PI / 3;
 	this.scaleRobot = 1.0;
 	this.drawAirplane = true;
@@ -52,7 +51,13 @@ LightingScene.prototype.init = function(application)
 	this.robotAppearanceList["Android"] = 0;
 	this.robotAppearanceList["R2-D2"] = 1;
 	this.robotAppearanceList["Cyanogenmod"] = 2;
-    
+	this.robotAppearanceFiles = {};
+	this.robotAppearanceFiles[0] = "../resources/images/robot_android.png";
+    this.robotAppearanceFiles[1] = "../resources/images/robot_r2d2.png";
+    this.robotAppearanceFiles[2] = "../resources/images/robot_cyanogen.png";
+    this.currentRobot = 0;
+    this.previousRobot = -1;
+
 	this.axis = new CGFaxis(this);
 	this.airplane = new MyAirplane(this);
 	this.ball = new MySphere(this, 16, 16);
@@ -189,6 +194,12 @@ LightingScene.prototype.updateLights = function()
 
 LightingScene.prototype.update = function(currTime)
 {
+	if (this.currentRobot != this.previousRobot)
+	{
+		this.robot.setTexture(this.robotAppearanceFiles[this.currentRobot]);
+		this.previousRobot = this.currentRobot;
+	}
+	
 	if (this.scenePaused)
 	{
 		return;

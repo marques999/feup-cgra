@@ -1,9 +1,15 @@
-function MyLamp(scene, slices, stacks) 
+function MyLamp(scene, slices, stacks, minS, maxS, minT, maxT) 
 {
 	CGFobject.call(this, scene);
 
 	this.slices = slices;
 	this.stacks = stacks;
+	this.minS = minS || 0.0;
+	this.maxS = maxS || 1.0;
+	this.minT = minT || 0.0;
+	this.maxT = maxT || 1.0;
+	this.texelLengthS = (this.maxS - this.minS) / this.slices;
+	this.texelLengthT = (this.maxT - this.minT) / this.stacks;
 	this.initBuffers();
 };
 
@@ -14,15 +20,18 @@ MyLamp.prototype.initBuffers = function()
 {
 	this.indices = [];
 	this.normals = [];
+	this.texCoords = [];
 	this.vertices = [];
 
 	var phi = 0;
+	var s = this.maxS;
 	var phiIncrement = (2 * Math.PI) / this.slices;
 	var thetaIncrement = Math.PI / (2 * this.stacks);
 
 	for (var i = 0; i <= this.slices; i++) 
 	{
 		var theta = 0;
+		var t = this.minT;
 
 		for (var j = 0; j <= this.stacks; j++) 
 		{
@@ -32,11 +41,14 @@ MyLamp.prototype.initBuffers = function()
 
 			this.vertices.push(x, y, z);
 			this.normals.push(x, y, z);
+			this.texCoords.push(s, t);
 
 			theta += thetaIncrement;
+			t += this.texelLengthT;
 		}
 
 		phi += phiIncrement;
+		s -= this.texelLengthS;
 	}
 
 	var vertexNumber = 1;
