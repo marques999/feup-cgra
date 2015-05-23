@@ -1,4 +1,4 @@
-function Plane(scene, nrDivs, minS, maxS, minT, maxT) 
+function Plane(scene, nrDivs, minS, maxS, minT, maxT)
 {
 	CGFobject.call(this, scene);
 
@@ -18,7 +18,7 @@ function Plane(scene, nrDivs, minS, maxS, minT, maxT)
 Plane.prototype = Object.create(CGFobject.prototype);
 Plane.prototype.constructor = Plane;
 
-Plane.prototype.initBuffers = function() 
+Plane.prototype.initBuffers = function()
 {
 	this.indices = [];
 	this.normals = [];
@@ -28,12 +28,12 @@ Plane.prototype.initBuffers = function()
 	var yCoord = 0.5;
 	var tCoord = this.minT;
 
-	for (var j = 0; j <= this.nrDivs; j++) 
+	for (var j = 0; j <= this.nrDivs; j++)
 	{
 		var xCoord = -0.5;
 		var sCoord = this.minS;
 
-		for (var i = 0; i <= this.nrDivs; i++) 
+		for (var i = 0; i <= this.nrDivs; i++)
 		{
 			this.vertices.push(xCoord, yCoord, 0);
 			this.normals.push(0, 0, 1);
@@ -49,9 +49,9 @@ Plane.prototype.initBuffers = function()
 
 	var ind = 0;
 
-	for (var j = 0; j < this.nrDivs; j++) 
+	for (var j = 0; j < this.nrDivs; j++)
 	{
-		for (var i = 0; i <= this.nrDivs; i++) 
+		for (var i = 0; i <= this.nrDivs; i++)
 		{
 			this.indices.push(ind);
 			this.indices.push(ind + this.nrDivs + 1);
@@ -59,7 +59,7 @@ Plane.prototype.initBuffers = function()
 			ind++;
 		}
 
-		if (j + 1 < this.nrDivs) 
+		if (j + 1 < this.nrDivs)
 		{
 			this.indices.push(ind + this.nrDivs);
 			this.indices.push(ind);

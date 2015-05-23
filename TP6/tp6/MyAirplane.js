@@ -4,9 +4,9 @@ function MyAirplane(scene)
 
 	this.airplaneAnimation =
 	{
-		AIRPLANE_FLYING : 0,
-		AIRPLANE_CRASH : 1,
-		AIRPLANE_FALLING : 2
+		AIRPLANE_FLYING: 0,
+		AIRPLANE_CRASH: 1,
+		AIRPLANE_FALLING: 2
 	};
 
 	this.initBuffers();
@@ -54,7 +54,7 @@ MyAirplane.prototype.initBuffers = function()
 	this.initGLBuffers();
 };
 
-MyAirplane.prototype.draw = function() 
+MyAirplane.prototype.draw = function()
 {
 	this.scene.translate(-1.5, 0.0, 0.0);
 	this.scene.scale(0.5, 0.5, 0.5);
@@ -69,7 +69,7 @@ MyAirplane.prototype.reset = function()
 	this.numberFrames = 70;
 	this.animationSection = 0;
 	this.currentX = -16.0;
-	this.currentY = 10.0;
+	this.currentY = 11.0;
 	this.currentZ = 24.0;
 	this.currentAngle = 0.0;
 };
@@ -91,12 +91,12 @@ MyAirplane.prototype.update = function()
 	}
 	else if (this.animationSection == this.airplaneAnimation.AIRPLANE_CRASH)
 	{
-		this.currentY -= 8.5 / this.numberFrames;
+		this.currentY -= 11.0 / this.numberFrames;
 
 		if (this.currentAngle > -Math.PI / 2)
 		{
 			this.currentAngle -= Math.PI / 12;
-		}	
+		}
 	}
 	else if (this.animationSection == this.airplaneAnimation.AIRPLANE_FALLING)
 	{

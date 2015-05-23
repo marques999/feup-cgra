@@ -1,4 +1,4 @@
-function MyClockHand(scene, size) 
+function MyClockHand(scene, size)
 {
 	CGFobject.call(this, scene);
 
@@ -11,7 +11,7 @@ function MyClockHand(scene, size)
 MyClockHand.prototype = Object.create(CGFobject.prototype);
 MyClockHand.prototype.constructor = MyClockHand;
 
-MyClockHand.prototype.display = function() 
+MyClockHand.prototype.display = function()
 {
 	this.scene.pushMatrix();
 	this.scene.rotate(this.angle * degToRad, 0, 0, -1);
@@ -21,7 +21,7 @@ MyClockHand.prototype.display = function()
 	this.scene.popMatrix();
 };
 
-MyClockHand.prototype.setAngle = function(a) 
+MyClockHand.prototype.setAngle = function(a)
 {
 	this.angle = a;
 };

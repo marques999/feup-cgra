@@ -1,4 +1,4 @@
-function MyLamp(scene, slices, stacks, minS, maxS, minT, maxT) 
+function MyLamp(scene, slices, stacks, minS, maxS, minT, maxT)
 {
 	CGFobject.call(this, scene);
 
@@ -16,7 +16,7 @@ function MyLamp(scene, slices, stacks, minS, maxS, minT, maxT)
 MyLamp.prototype = Object.create(CGFobject.prototype);
 MyLamp.prototype.constructor = MyLamp;
 
-MyLamp.prototype.initBuffers = function() 
+MyLamp.prototype.initBuffers = function()
 {
 	this.indices = [];
 	this.normals = [];
@@ -24,16 +24,16 @@ MyLamp.prototype.initBuffers = function()
 	this.vertices = [];
 
 	var phi = 0;
-	var s = this.maxS;
+	var sCoord = this.maxS;
 	var phiIncrement = (2 * Math.PI) / this.slices;
 	var thetaIncrement = Math.PI / (2 * this.stacks);
 
-	for (var i = 0; i <= this.slices; i++) 
+	for (var i = 0; i <= this.slices; i++)
 	{
 		var theta = 0;
-		var t = this.minT;
+		var tCoord = this.minT;
 
-		for (var j = 0; j <= this.stacks; j++) 
+		for (var j = 0; j <= this.stacks; j++)
 		{
 			var x = Math.cos(phi) * Math.sin(theta);
 			var z = Math.sin(phi) * Math.sin(theta);
@@ -41,21 +41,21 @@ MyLamp.prototype.initBuffers = function()
 
 			this.vertices.push(x, y, z);
 			this.normals.push(x, y, z);
-			this.texCoords.push(s, t);
+			this.texCoords.push(sCoord, tCoord);
 
 			theta += thetaIncrement;
-			t += this.texelLengthT;
+			tCoord += this.texelLengthT;
 		}
 
 		phi += phiIncrement;
-		s -= this.texelLengthS;
+		sCoord -= this.texelLengthS;
 	}
 
 	var vertexNumber = 1;
 
-	for (var i = 0; i < this.slices; i++) 
+	for (var i = 0; i < this.slices; i++)
 	{
-		for (var j = 0; j < this.stacks; j++) 
+		for (var j = 0; j < this.stacks; j++)
 		{
 			this.indices.push(vertexNumber, vertexNumber + this.stacks, vertexNumber + this.stacks + 1);
 			this.indices.push(vertexNumber + this.stacks, vertexNumber, vertexNumber - 1);

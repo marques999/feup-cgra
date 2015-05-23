@@ -7,17 +7,21 @@ function MyRobot(scene)
 	this.robotZ = 8.0;
 	this.robotAngle = 0.0;
 	this.robotGreet = 0;
-	this.robotIncrement = Math.PI / 12;
+	this.largeIncrement = Math.PI / 12;
 	this.robotJump = 0;
 	this.robotScale = 1.0;
 	this.robotSpeed = 0.2;
 
+	this.goForward = 0;
+	this.goBackward = 0;
+	this.rotateLeft = 0;
+	this.rotateRight = 0;
 	this.leftArmAngle = 0;
 	this.rightArmAngle = 0;
 	this.leftWheelAngle = 0;
 	this.rightWheelAngle = 0;
 
-	this.armIncrement = Math.PI / 24;
+	this.smallIncrement = Math.PI / 24;
 	this.armAmplitude = Math.PI / 3;
 	this.armMovement = 0;
 	this.armRaiseAmplitude = Math.PI;
@@ -31,19 +35,19 @@ function MyRobot(scene)
 	this.robotAppearance.setSpecular(0.6, 0.6, 0.6, 1.0);
 	this.robotAppearance.setShininess(60);
 
-	this.greetAnimation = 
+	this.greetAnimation =
 	{
-		ARM_STOP : 0,
-		ARM_RAISE : 1,
-		ARM_WAVE : 4,
-		ARM_LOWER : 5,
+		ARM_STOP: 0,
+		ARM_RAISE: 1,
+		ARM_WAVE: 4,
+		ARM_LOWER: 5,
 	};
 
-	this.jumpAnimation = 
+	this.jumpAnimation =
 	{
-		JUMP_STOP : 0,
-		JUMP_UP : 1,
-		JUMP_DOWN : 2,
+		JUMP_STOP: 0,
+		JUMP_UP: 1,
+		JUMP_DOWN: 2,
 	};
 
 	this.robotBody = new MyCylinder(this.scene, 24, 24, 0.0, 1.0, 0.5, 1.0);
@@ -63,6 +67,16 @@ function MyRobot(scene)
 MyRobot.prototype = Object.create(CGFobject.prototype);
 MyRobot.prototype.constructor = MyRobot;
 
+MyRobot.prototype.setAmplitude = function(ang)
+{
+	this.armAmplitude = ang;
+}
+
+MyRobot.prototype.setScale = function(amt)
+{
+	this.robotScale = amt;
+};
+
 MyRobot.prototype.setTexture = function(str)
 {
 	this.robotAppearance.loadTexture(str);
@@ -72,8 +86,8 @@ MyRobot.prototype.moveArms = function()
 {
 	if (!this.armMovement)
 	{
-		this.leftArmAngle -= this.robotIncrement;
-		this.rightArmAngle -= this.robotIncrement;
+		this.leftArmAngle -= this.largeIncrement;
+		this.rightArmAngle -= this.largeIncrement;
 
 		if (this.leftArmAngle <= -this.armAmplitude)
 		{
@@ -82,8 +96,8 @@ MyRobot.prototype.moveArms = function()
 	}
 	else
 	{
-		this.leftArmAngle += this.robotIncrement;
-		this.rightArmAngle += this.robotIncrement;
+		this.leftArmAngle += this.largeIncrement;
+		this.rightArmAngle += this.largeIncrement;
 
 		if (this.leftArmAngle >= this.armAmplitude)
 		{
@@ -114,14 +128,14 @@ MyRobot.prototype.move = function(dx, dz)
 
 MyRobot.prototype.moveForward = function()
 {
-	this.move(-Math.sin(this.robotAngle), -Math.cos(this.robotAngle));
+	this.move(-Math.sin(this.robotAngle) / 4, -Math.cos(this.robotAngle) / 4);
 	this.rotateLeftWheel(true);
 	this.rotateRightWheel(true);
 };
 
 MyRobot.prototype.moveBackward = function()
 {
-	this.move(Math.sin(this.robotAngle), Math.cos(this.robotAngle));
+	this.move(Math.sin(this.robotAngle) / 4, Math.cos(this.robotAngle) / 4);
 	this.rotateLeftWheel(false);
 	this.rotateRightWheel(false);
 };
@@ -132,16 +146,16 @@ MyRobot.prototype.rotate = function(right)
 	{
 		return;
 	}
-	
+
 	if (right)
 	{
-		this.robotAngle -= this.robotIncrement;
+		this.robotAngle -= this.smallIncrement;
 		this.rotateLeftWheel(false);
 		this.rotateRightWheel(true);
 	}
 	else
 	{
-		this.robotAngle += this.robotIncrement;
+		this.robotAngle += this.smallIncrement;
 		this.rotateLeftWheel(true);
 		this.rotateRightWheel(false);
 	}
@@ -151,11 +165,11 @@ MyRobot.prototype.rotateLeftWheel = function(forward)
 {
 	if (forward)
 	{
-		this.leftWheelAngle -= this.robotIncrement;
+		this.leftWheelAngle -= this.smallIncrement;
 	}
 	else
 	{
-		this.leftWheelAngle += this.robotIncrement;
+		this.leftWheelAngle += this.smallIncrement;
 	}
 };
 
@@ -163,36 +177,11 @@ MyRobot.prototype.rotateRightWheel = function(forward)
 {
 	if (forward)
 	{
-		this.rightWheelAngle += this.robotIncrement;
+		this.rightWheelAngle += this.smallIncrement;
 	}
 	else
 	{
-		this.rightWheelAngle -= this.robotIncrement;
-	}	
-};
-
-MyRobot.prototype.rotateLeft = function()
-{
-	this.rotate(false);
-};
-
-MyRobot.prototype.rotateRight = function()
-{
-	this.rotate(true);
-}
-
-MyRobot.prototype.update = function()
-{
-	this.robotScale = this.scene.scaleRobot;
-
-	if (this.robotJump)
-	{
-		this.jumpAux();
-	}
-
-	if (this.robotGreet)
-	{
-		this.greet();
+		this.rightWheelAngle -= this.smallIncrement;
 	}
 };
 
@@ -216,21 +205,23 @@ MyRobot.prototype.jumpAux = function()
 	if (this.robotJump == this.jumpAnimation.JUMP_UP)
 	{
 		if (this.robotY < 3.0)
-		{	
+		{
 			this.robotSpeed -= 0.005;
 			this.robotY += this.robotSpeed;
-			
+			this.robotX -= Math.sin(this.robotAngle) / 24;
+			this.robotZ -= Math.cos(this.robotAngle) / 24;
+
 			if (this.rightArmAngle < this.armRaiseAmplitude)
 			{
-				this.leftArmAngle -= this.armIncrement;
-				this.rightArmAngle += this.armIncrement;
+				this.leftArmAngle -= this.smallIncrement;
+				this.rightArmAngle += this.smallIncrement;
 			}
 		}
 		else
 		{
 			this.robotSpeed = -this.robotSpeed;
 			this.robotJump = this.jumpAnimation.JUMP_DOWN;
-		}	 
+		}
 	}
 	else if (this.robotJump == this.jumpAnimation.JUMP_DOWN)
 	{
@@ -238,11 +229,13 @@ MyRobot.prototype.jumpAux = function()
 		{
 			this.robotSpeed += 0.01;
 			this.robotY -= this.robotSpeed;
+			this.robotX -= Math.sin(this.robotAngle) / 24;
+			this.robotZ -= Math.cos(this.robotAngle) / 24;
 
 			if (this.rightArmAngle > 0.0)
 			{
-				this.leftArmAngle += this.armIncrement;
-				this.rightArmAngle -= this.armIncrement;
+				this.leftArmAngle += this.smallIncrement;
+				this.rightArmAngle -= this.smallIncrement;
 			}
 		}
 		else
@@ -262,7 +255,7 @@ MyRobot.prototype.greet = function()
 	{
 		if (this.rightArmAngle <= this.armRaiseAmplitude)
 		{
-			this.rightArmAngle += this.robotIncrement;
+			this.rightArmAngle += this.largeIncrement;
 		}
 		else
 		{
@@ -275,7 +268,7 @@ MyRobot.prototype.greet = function()
 		{
 			this.armWaveAngle = this.armWaveAmplitude;
 			this.armWaveIncrement = -this.armWaveIncrement;
-		} 
+		}
 		else if (this.armWaveAngle < 0.0)
 		{
 			this.armWaveAngle = 0.0;
@@ -291,7 +284,7 @@ MyRobot.prototype.greet = function()
 	{
 		if (this.rightArmAngle > 0.0)
 		{
-			this.rightArmAngle -= this.robotIncrement;
+			this.rightArmAngle -= this.largeIncrement;
 		}
 		else
 		{
@@ -303,8 +296,47 @@ MyRobot.prototype.greet = function()
 	}
 };
 
-MyRobot.prototype.draw = function()
+MyRobot.prototype.update = function()
 {
+	if (this.robotJump)
+	{
+		this.jumpAux();
+	}
+	else if (this.robotGreet)
+	{
+		this.greet();
+	}
+	else
+	{
+		if (this.goForward)
+		{
+			this.moveForward();
+		}
+
+		if (this.goBackward)
+		{
+			this.moveBackward();
+		}
+
+		if (this.rotateLeft)
+		{
+			this.rotate(false);
+		}
+
+		if (this.rotateRight)
+		{
+			this.rotate(true);
+		}
+	}
+}
+
+MyRobot.prototype.display = function()
+{
+	// Robot
+	this.scene.translate(this.robotX, this.robotY, this.robotZ);
+	this.scene.rotate(this.robotAngle, 0, 1, 0);
+	this.scene.scale(this.robotScale, this.robotScale, this.robotScale);
+
 	// Robot Body
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.25, 0.0);
@@ -353,12 +385,4 @@ MyRobot.prototype.draw = function()
 	this.scene.rotate(this.armWaveAngle, 0, 0, 1);
 	this.robotRightArm.display();
 	this.scene.popMatrix();
-};
-
-MyRobot.prototype.display = function()
-{
-	this.scene.translate(this.robotX, this.robotY, this.robotZ);
-	this.scene.rotate(this.robotAngle, 0, 1, 0);
-	this.scene.scale(this.robotScale, this.robotScale, this.robotScale);
-	this.draw();
 };

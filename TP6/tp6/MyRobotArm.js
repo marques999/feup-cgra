@@ -3,8 +3,8 @@ function MyRobotArm(scene)
 	CGFobject.call(this, scene);
 
 	this.robotArm = new MyCylinder(this.scene, 12, 12);
-	this.robotHand = new MyLamp(this.scene, 12, 12);
 	this.robotArm.initBuffers();
+	this.robotHand = new MyLamp(this.scene, 12, 12);
 	this.robotHand.initBuffers();
 
 	this.handAppearance = new CGFappearance(this.scene);
@@ -27,7 +27,7 @@ MyRobotArm.prototype.display = function()
 	// moldura da roda
 	this.scene.pushMatrix();
 	this.scene.scale(0.15, 0.5, 0.15);
-	this.scene.translate(0, -1.0, 0);
+	this.scene.translate(0.0, -1.0, 0.0);
 	this.armAppearance.apply();
 	this.robotArm.display();
 	this.scene.popMatrix();

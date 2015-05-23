@@ -55,8 +55,8 @@ MyTable.prototype.display = function()
 
 	// tampo
 	this.scene.pushMatrix();
-	this.scene.translate(0, 3.65, 0);
-	this.scene.scale(5, 0.3, 3);
+	this.scene.translate(0.0, 3.65, 0.0);
+	this.scene.scale(5.0, 0.3, 3.0);
 	this.wood.apply();
 	this.quad.display();
 	this.scene.popMatrix();

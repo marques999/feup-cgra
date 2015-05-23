@@ -15,7 +15,7 @@ function MyCircle(scene, slices, minS, maxS, minT, maxT)
 MyCircle.prototype = Object.create(CGFobject.prototype);
 MyCircle.prototype.constructor = MyCircle;
 
-MyCircle.prototype.initBuffers = function() 
+MyCircle.prototype.initBuffers = function()
 {
 	this.indices = [];
 	this.normals = [];
@@ -30,8 +30,8 @@ MyCircle.prototype.initBuffers = function()
 	this.texCoords.push(this.texelLengthS, this.texelLengthT);
 	this.normals.push(0, 0, 1);
 
-	for (var i = 0; i <= this.slices; i++) 
-	{
+	for (var i = 0; i <= this.slices; i++)
+{
 		var x = Math.cos(theta);
 		var y = Math.sin(theta);
 
@@ -42,8 +42,8 @@ MyCircle.prototype.initBuffers = function()
 		theta += thetaIncrement;
 	}
 
-	for (var i = 0; i < this.slices; i++, vertexNumber++) 
-	{
+	for (var i = 0; i < this.slices; i++, vertexNumber++)
+{
 		this.indices.push(vertexNumber, vertexNumber + 1, 0);
 	}
 

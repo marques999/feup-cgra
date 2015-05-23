@@ -3,8 +3,8 @@ function MyRobotWheel(scene)
 	CGFobject.call(this, scene);
 
 	this.robotRim = new MyCircle(this.scene, 24, 0.0, 1.0, 0.0, 0.0, 1.0);
-	this.robotTire = new MyCylinder(this.scene, 24, 1, 0.0, 2.0, 0.0, 1.0);
 	this.robotRim.initBuffers();
+	this.robotTire = new MyCylinder(this.scene, 24, 1, 0.0, 2.0, 0.0, 1.0);
 	this.robotTire.initBuffers();
 
 	this.tireAppearance = new CGFappearance(this.scene);
@@ -45,7 +45,6 @@ MyRobotWheel.prototype.display = function()
 	// back-facing wheel
 	this.scene.pushMatrix();
 	this.scene.rotate(Math.PI, 0, 1, 0);
-	this.wheelAppearance.apply();
 	this.robotRim.display();
 	this.scene.popMatrix();
 };

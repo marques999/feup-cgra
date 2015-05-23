@@ -1,4 +1,4 @@
-function MyClock(scene) 
+function MyClock(scene)
 {
 	CGFobject.call(this, scene);
 
@@ -43,14 +43,14 @@ function MyClock(scene)
 	this.secondsIncrement = 360 / 60;
 	this.secondsInterval = 1000;
 	this.minutesIncrement = this.secondsIncrement / 60;
-	this.hoursIncrement =  this.minutesIncrement / 12;
+	this.hoursIncrement = this.minutesIncrement / 12;
 	this.lastUpdate = 0;
 };
 
 MyClock.prototype = Object.create(CGFobject.prototype);
 MyClock.prototype.constructor = MyClock;
 
-MyClock.prototype.display = function() 
+MyClock.prototype.display = function()
 {
 	// ponteiro dos segundos
 	this.scene.pushMatrix();
@@ -84,7 +84,7 @@ MyClock.prototype.display = function()
 	// frente do relogio
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, 0.0, 0.2);
-	this.scene.scale(0.7, 0.7, 1);
+	this.scene.scale(0.7, 0.7, 1.0);
 	this.clockAppearance.apply();
 	this.clockTop.display();
 	this.scene.popMatrix();

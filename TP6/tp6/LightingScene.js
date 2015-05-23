@@ -1,11 +1,10 @@
 var degToRad = Math.PI / 180.0;
-
 var BOARD_WIDTH = 6.0;
 var BOARD_HEIGHT = 4.0;
 var BOARD_A_DIVISIONS = 30;
 var BOARD_B_DIVISIONS = 100;
 
-function LightingScene() 
+function LightingScene()
 {
 	CGFscene.call(this);
 }
@@ -27,12 +26,13 @@ LightingScene.prototype.init = function(application)
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.airplanePaused = false;
-	this.clockPaused = false; 
+	this.clockPaused = false;
 	this.scenePaused = false;
 	this.armAmplitude = Math.PI / 3;
-	this.scaleRobot = 1.0;
-	this.drawAirplane = true;
+	this.previousAmplitude = 0.0;
+	this.previousScale = 0.0;
+	this.robotScale = 1.0;
+	this.drawBall = true;
 	this.drawChairs = true;
 	this.drawClock = true;
 	this.drawTables = true;
@@ -53,26 +53,32 @@ LightingScene.prototype.init = function(application)
 	this.robotAppearanceList["Cyanogenmod"] = 2;
 	this.robotAppearanceFiles = {};
 	this.robotAppearanceFiles[0] = "../resources/images/robot_android.png";
-    this.robotAppearanceFiles[1] = "../resources/images/robot_r2d2.png";
-    this.robotAppearanceFiles[2] = "../resources/images/robot_cyanogen.png";
-    this.currentRobot = 0;
-    this.previousRobot = -1;
+	this.robotAppearanceFiles[1] = "../resources/images/robot_r2d2.png";
+	this.robotAppearanceFiles[2] = "../resources/images/robot_cyanogen.png";
+	this.currentRobot = 0;
+	this.previousRobot = -1;
 
 	this.axis = new CGFaxis(this);
-	this.airplane = new MyAirplane(this);
 	this.ball = new MySphere(this, 16, 16);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
 	this.boardB = new Plane(this, BOARD_B_DIVISIONS, 0.0, 1.0, 0.0, 1.0);
 	this.chair = new MyChair(this);
 	this.clock = new MyClock(this);
 	this.cylinder = new MyCylinder(this, 32, 64);
-	this.floor = new MyQuad(this, 0.0, 6.0, 0, 4.0);
+	this.floor = new MyQuad(this, 0.0, 6.0, 0.0, 4.0);
 	this.robot = new MyRobot(this);
 	this.table = new MyTable(this);
-	this.wallA = new MyQuad(this, -1.0, 2.0, -0.5, 1.5);
+	this.wallA = new MyCircle(this, 12, 0.0, 1.0, 0.0, 1.0);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
-	this.landscape = new MyImpostor(this);
+	this.impostor = new MyImpostor(this);
 	this.materialDefault = new CGFappearance(this);
+
+	this.ballAppearance = new CGFappearance(this);
+	this.ballAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
+	this.ballAppearance.setDiffuse(0.8, 0.8, 0.8, 0.8);
+	this.ballAppearance.setSpecular(0.2, 0.2, 0.2, 0.2);
+	this.ballAppearance.loadTexture("../resources/images/soccer.png");
+	this.ballAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 	this.boardAppearance = new CGFappearance(this);
 	this.boardAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
@@ -114,15 +120,10 @@ LightingScene.prototype.init = function(application)
 	this.windowAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
 	this.windowAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
 	this.windowAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-	this.windowAppearance.loadTexture("../resources/images/window.png");
+	this.windowAppearance.loadTexture("../resources/images/bliss.png");
 	this.windowAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 	this.setUpdatePeriod(1000.0 / this.updateInterval);
-};
-
-LightingScene.prototype.pauseAirplane = function()
-{
-	this.airplanePaused = !this.airplanePaused;
 };
 
 LightingScene.prototype.pauseClock = function()
@@ -135,12 +136,27 @@ LightingScene.prototype.pauseScene = function()
 	this.scenePaused = !this.scenePaused;
 };
 
-LightingScene.prototype.initCameras = function() 
+LightingScene.prototype.initCameras = function()
 {
 	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
 };
 
-LightingScene.prototype.initLights = function() 
+LightingScene.prototype.defaultView = function()
+{
+	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
+}
+
+LightingScene.prototype.frontView = function()
+{
+	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(7.5, 7.0, 25), vec3.fromValues(7.5, 2.0, 0));
+}
+
+LightingScene.prototype.topView = function()
+{
+	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(7.5, 50.0, 15.0), vec3.fromValues(7.5, 0.0, 7.5));
+}
+
+LightingScene.prototype.initLights = function()
 {
 	this.setGlobalAmbientLight(0.0, 0.0, 0.0, 1.0);
 	this.shader.bind();
@@ -184,9 +200,9 @@ LightingScene.prototype.initLights = function()
 	this.shader.unbind();
 };
 
-LightingScene.prototype.updateLights = function() 
+LightingScene.prototype.updateLights = function()
 {
-	for (i = 0; i < this.lights.length; i++) 
+	for (i = 0; i < this.lights.length; i++)
 	{
 		this.lights[i].update();
 	}
@@ -199,16 +215,35 @@ LightingScene.prototype.update = function(currTime)
 		this.robot.setTexture(this.robotAppearanceFiles[this.currentRobot]);
 		this.previousRobot = this.currentRobot;
 	}
-	
-	if (this.scenePaused)
+
+	if (this.armAmplitude != this.previousAmplitude)
 	{
-		return;
+		this.robot.setAmplitude(this.armAmplitude);
+		this.previousAmplitude = this.armAmplitude;
+	}
+	
+	if (this.robotScale != this.previousScale)
+	{
+		this.robot.setScale(this.robotScale);
+		this.previousScale = this.robotScale;
 	}
 
 	if (this.updateInterval != this.previousInterval)
 	{
 		this.previousInterval = this.updateInterval;
 		this.setUpdatePeriod(1000 / this.updateInterval);
+	}
+
+	if (this.scenePaused)
+	{
+		return;
+	}
+
+	this.robot.update();
+
+	if (!this.clockPaused)
+	{
+		this.clock.update(currTime);
 	}
 
 	if (this.slidesLight)
@@ -246,22 +281,9 @@ LightingScene.prototype.update = function(currTime)
 	{
 		this.lights[3].disable();
 	}
-	
-	if (!this.clockPaused)
-	{
-		this.clock.update(currTime);
-	}
-	
-	if (!this.airplanePaused)
-	{
-		this.airplane.update();
-	}
-	
-	this.robot.armAmplitude = this.armAmplitude;
-	this.robot.update();
 }
 
-LightingScene.prototype.display = function() 
+LightingScene.prototype.display = function()
 {
 	this.shader.bind();
 	this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -282,15 +304,15 @@ LightingScene.prototype.display = function()
 	this.floor.display();
 	this.popMatrix();
 
-	// Left Wall
+	// impostor
 	this.pushMatrix();
-	this.translate(0, 4, 7.5);
+	this.translate(-8.0, 4, 7.5);
 	this.rotate(90 * degToRad, 0, 1, 0);
 	this.scale(15, 8, 0.2);
 	this.windowAppearance.apply();
 	this.wallA.display();
 	this.popMatrix();
-	
+
 	// Plane Wall
 	this.pushMatrix();
 	this.translate(7.5, 4, 0);
@@ -298,53 +320,59 @@ LightingScene.prototype.display = function()
 	this.wallAppearance.apply();
 	this.wallB.display();
 	this.popMatrix();
-	
-	// Beach Ball
-	this.pushMatrix();
-	this.translate(1.5, 1.0, 1.5);
-	this.materialDefault.apply();
-	this.ball.display();
-	this.popMatrix();
-	
+
+	if (this.drawBall)
+	{
+		this.pushMatrix();
+		this.scale(0.6, 0.6, 0.6);
+		this.translate(6.0, 7.3, 13.0);
+		this.rotate(Math.PI / 2, -1, 0, 0);
+		this.rotate(Math.PI / 6, 0, 0, -1);
+		this.rotate(3 * Math.PI / 4, 0, -1, 0);
+		this.ballAppearance.apply();
+		this.ball.display();
+		this.popMatrix();
+	}
+
 	if (this.drawChairs)
 	{
-		// Left Chair 1
+		// Left Chair #1
 		this.pushMatrix();
 		this.translate(12.5, 6.35, 8);
-		this.rotate(Math.PI/1.3, 1, 0, -1);
+		this.rotate(Math.PI / 1.3, 1, 0, -1);
 		this.chair.display();
 		this.popMatrix();
 
-		// Left Chair 2
+		// Left Chair #2
 		this.pushMatrix();
 		this.translate(5.0, 0, 9.85);
 		this.rotate(Math.PI, 0, 1, 0);
 		this.chair.display();
 		this.popMatrix();
-	
+
 		// Right Chair
 		this.pushMatrix();
 		this.translate(5.0, 0, 5.85);
 		this.chair.display();
 		this.popMatrix();
 	}
-	
-	// Landscape Impostor
+
+	// Window Impostor
 	this.pushMatrix();
-	this.landscape.display();
+	this.impostor.display();
 	this.popMatrix();
-	
+
 	if (this.drawTables)
 	{
-		// First Table
+		// Left Table
 		this.pushMatrix();
-		this.translate(5, 0, 8);
+		this.translate(5.0, 0.0, 8.0);
 		this.table.display();
 		this.popMatrix();
 
-		// Second Table
+		// Right Table
 		this.pushMatrix();
-		this.translate(12, 0, 8);
+		this.translate(12.0, 0.0, 8.0);
 		this.table.display();
 		this.popMatrix();
 	}
@@ -368,20 +396,12 @@ LightingScene.prototype.display = function()
 		this.boardB.display();
 		this.popMatrix();
 	}
-	
+
 	if (this.drawClock)
 	{
 		this.pushMatrix();
 		this.translate(7.25, 7.25, 0);
 		this.clock.display();
-		this.popMatrix();
-	}
-
-	if (this.drawAirplane)
-	{
-		this.pushMatrix();
-		this.airplane.draw();
-		this.airplane.display();
 		this.popMatrix();
 	}
 
@@ -391,10 +411,10 @@ LightingScene.prototype.display = function()
 		this.robot.display();
 		this.popMatrix();
 	}
-	
+
 	if (this.drawColumns)
 	{
-		// Left Column
+		// left column
 		this.pushMatrix();
 		this.scale(1, 8, 1);
 		this.translate(2.5, 0, 12.5);
@@ -402,7 +422,7 @@ LightingScene.prototype.display = function()
 		this.cylinder.display();
 		this.popMatrix();
 
-		// Right Column
+		// right column
 		this.pushMatrix();
 		this.scale(1, 8, 1);
 		this.translate(12.5, 0, 12.5);

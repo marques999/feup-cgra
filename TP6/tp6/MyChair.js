@@ -55,7 +55,7 @@ MyChair.prototype.display = function()
 
 	// perna anterior esquerda
 	this.scene.pushMatrix();
-	this.scene.translate(-0.85,  0.85, -0.85);
+	this.scene.translate(-0.85, 0.85, -0.85);
 	this.scene.scale(0.3, 2.0, 0.3);
 	this.quad.display();
 	this.scene.popMatrix();

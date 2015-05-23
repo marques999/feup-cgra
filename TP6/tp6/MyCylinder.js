@@ -1,4 +1,4 @@
-function MyCylinder(scene, slices, stacks, minS, maxS, minT, maxT) 
+function MyCylinder(scene, slices, stacks, minS, maxS, minT, maxT)
 {
 	CGFobject.call(this, scene);
 
@@ -16,7 +16,7 @@ function MyCylinder(scene, slices, stacks, minS, maxS, minT, maxT)
 MyCylinder.prototype = Object.create(CGFobject.prototype);
 MyCylinder.prototype.constructor = MyCylinder;
 
-MyCylinder.prototype.initBuffers = function() 
+MyCylinder.prototype.initBuffers = function()
 {
 	this.vertices = [];
 	this.texCoords = [];
@@ -25,36 +25,36 @@ MyCylinder.prototype.initBuffers = function()
 	var theta = 0;
 	var thetaIncrement = (2 * Math.PI) / this.slices;
 	var stackIncrement = 1.0 / this.stacks;
-	var s = this.maxS;
+	var sCoord = this.maxS;
 
-	for (var i = 0; i <= this.slices; i++) 
+	for (var i = 0; i <= this.slices; i++)
 	{
+		var tCoord = this.maxT;
 		var x = Math.cos(theta);
 		var y = Math.sin(theta);
-		var t = this.maxT;
 		var z = 0;
 
-		for (var j = 0; j <= this.stacks; j++) 
+		for (var j = 0; j <= this.stacks; j++)
 		{
 			this.vertices.push(x, z, y);
 			this.normals.push(x, 0, y);
-			this.texCoords.push(s, t);
+			this.texCoords.push(sCoord, tCoord);
 
 			z += stackIncrement;
-			t -= this.texelLengthT;
+			tCoord -= this.texelLengthT;
 		}
 
 		theta += thetaIncrement;
-		s -= this.texelLengthS;
+		sCoord -= this.texelLengthS;
 	}
 
 	this.indices = [];
 
 	var vertexNumber = 1;
 
-	for (var i = 0; i < this.slices; i++) 
+	for (var i = 0; i < this.slices; i++)
 	{
-		for (var j = 0; j < this.stacks; j++) 
+		for (var j = 0; j < this.stacks; j++)
 		{
 			this.indices.push(vertexNumber, vertexNumber + this.stacks, vertexNumber + this.stacks + 1);
 			this.indices.push(vertexNumber + this.stacks, vertexNumber, vertexNumber - 1);
