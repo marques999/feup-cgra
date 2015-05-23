@@ -52,6 +52,8 @@ function MyRobot(scene)
 
 	this.robotBody = new MyCylinder(this.scene, 24, 24, 0.0, 1.0, 0.5, 1.0);
 	this.robotBody.initBuffers();
+	this.robotBottom = new MyCircle(this.scene, 24, 1, -1.0, 0.0, -1.0, 0.0);
+	this.robotBottom.initBuffers();
 	this.robotHead = new MyLamp(this.scene, 24, 24, 0.0, 1.0, 0.0, 0.5);
 	this.robotHead.initBuffers();
 	this.robotLeftArm = new MyRobotArm(this.scene);
@@ -328,6 +330,15 @@ MyRobot.prototype.display = function()
 	this.scene.scale(0.7, 1.25, 0.7);
 	this.robotAppearance.apply();
 	this.robotBody.display();
+	this.scene.popMatrix();
+
+	// Robot Bottom
+	this.scene.pushMatrix();
+	this.scene.translate(0.0, 0.25, 0.0);
+	this.scene.scale(0.7, 1.0, 0.7);
+	this.scene.rotate(Math.PI / 2, 1, 0, 0);
+	this.robotAppearance.apply();
+	this.robotBottom.display();
 	this.scene.popMatrix();
 
 	// Robot Head

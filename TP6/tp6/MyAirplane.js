@@ -91,7 +91,7 @@ MyAirplane.prototype.update = function()
 	}
 	else if (this.animationSection == this.airplaneAnimation.AIRPLANE_CRASH)
 	{
-		this.currentY -= 11.0 / this.numberFrames;
+		this.currentY -= 10.5 / this.numberFrames;
 
 		if (this.currentAngle > -Math.PI / 2)
 		{

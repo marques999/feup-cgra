@@ -223,7 +223,7 @@ LightingScene.prototype.update = function(currTime)
 		this.robot.setAmplitude(this.armAmplitude);
 		this.previousAmplitude = this.armAmplitude;
 	}
-	
+
 	if (this.robotScale != this.previousScale)
 	{
 		this.robot.setScale(this.robotScale);
@@ -347,7 +347,7 @@ LightingScene.prototype.display = function()
 		this.translate(5.0, 0.0, 5.85);
 		this.chair.display();
 		this.popMatrix();
-		
+
 		// Right Chair
 		this.pushMatrix();
 		this.translate(12.5, 6.35, 8.0);
@@ -393,7 +393,7 @@ LightingScene.prototype.display = function()
 		this.boardA.display();
 		this.popMatrix();
 	}
-	
+
 	if (this.drawBoard)
 	{
 		// White Board
