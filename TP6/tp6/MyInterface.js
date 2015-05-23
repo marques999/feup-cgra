@@ -17,10 +17,10 @@ MyInterface.prototype.init = function(application)
 	var groupLights = this.gui.addFolder("Lights");
 
 	groupLights.open();
-	groupLights.add(this.scene, 'slidesLight');
+	groupLights.add(this.scene, 'backgroundLight');
 	groupLights.add(this.scene, 'boardLight');
+	groupLights.add(this.scene, 'slidesLight');
 	groupLights.add(this.scene, 'windowLight');
-	groupLights.add(this.scene, 'pillarLight');
 
 	var groupViews = this.gui.addFolder("Views");
 
@@ -37,6 +37,7 @@ MyInterface.prototype.init = function(application)
 	groupScene.add(this.scene, 'drawChairs');
 	groupScene.add(this.scene, 'drawClock');
 	groupScene.add(this.scene, 'drawColumns');
+	groupScene.add(this.scene, 'drawLandscape');
 	groupScene.add(this.scene, 'drawRobot');
 	groupScene.add(this.scene, 'drawSlides');
 	groupScene.add(this.scene, 'drawTables');

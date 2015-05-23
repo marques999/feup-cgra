@@ -24,7 +24,7 @@ MyRobotArm.prototype.constructor = MyRobotArm;
 
 MyRobotArm.prototype.display = function()
 {
-	// moldura da roda
+	// robot arm
 	this.scene.pushMatrix();
 	this.scene.scale(0.15, 0.5, 0.15);
 	this.scene.translate(0.0, -1.0, 0.0);
@@ -32,14 +32,14 @@ MyRobotArm.prototype.display = function()
 	this.robotArm.display();
 	this.scene.popMatrix();
 
-	// frente da roda
+	// robot shoulder
 	this.scene.pushMatrix();
 	this.scene.scale(0.15, 0.15, 0.15);
 	this.handAppearance.apply();
 	this.robotHand.display();
 	this.scene.popMatrix();
 
-	// traseira da roda
+	// robot hand
 	this.scene.pushMatrix();
 	this.scene.translate(0.0, -0.5, 0.0);
 	this.scene.scale(0.15, 0.15, 0.15);

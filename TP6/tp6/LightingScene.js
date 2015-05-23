@@ -33,19 +33,21 @@ LightingScene.prototype.init = function(application)
 	this.previousScale = 0.0;
 	this.robotScale = 1.0;
 	this.drawBall = true;
+	this.drawBoard = true;
 	this.drawChairs = true;
 	this.drawClock = true;
-	this.drawTables = true;
 	this.drawColumns = true;
+	this.drawLandscape = true;
 	this.drawRobot = true;
 	this.drawSlides = true;
-	this.drawBoard = true;
+	this.drawTables = true;
 	this.updateInterval = 60;
 	this.previousInterval = 60;
-	this.slidesLight = true;
+
+	this.backgroundLight = true;
 	this.boardLight = true;
+	this.slidesLight = true;
 	this.windowLight = true;
-	this.pillarLight = true;
 
 	this.robotAppearanceList = {};
 	this.robotAppearanceList["Android"] = 0;
@@ -68,9 +70,9 @@ LightingScene.prototype.init = function(application)
 	this.floor = new MyQuad(this, 0.0, 6.0, 0.0, 4.0);
 	this.robot = new MyRobot(this);
 	this.table = new MyTable(this);
-	this.wallA = new MyCircle(this, 12, 0.0, 1.0, 0.0, 1.0);
+	this.impostor = new MyCircle(this, 12, 0.0, 1.0, 0.0, 1.0);
 	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
-	this.impostor = new MyImpostor(this);
+	this.wallA = new MyImpostor(this);
 	this.materialDefault = new CGFappearance(this);
 
 	this.ballAppearance = new CGFappearance(this);
@@ -116,12 +118,12 @@ LightingScene.prototype.init = function(application)
 	this.wallAppearance.loadTexture("../resources/images/wall.png");
 	this.wallAppearance.setTextureWrap("REPEAT", "REPEAT");
 
-	this.windowAppearance = new CGFappearance(this);
-	this.windowAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
-	this.windowAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
-	this.windowAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-	this.windowAppearance.loadTexture("../resources/images/bliss.png");
-	this.windowAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+	this.landscapeAppearance = new CGFappearance(this);
+	this.landscapeAppearance.setAmbient(0.5, 0.5, 0.5, 1.0);
+	this.landscapeAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
+	this.landscapeAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
+	this.landscapeAppearance.loadTexture("../resources/images/bliss.png");
+	this.landscapeAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 	this.setUpdatePeriod(1000.0 / this.updateInterval);
 };
@@ -273,7 +275,7 @@ LightingScene.prototype.update = function(currTime)
 		this.lights[2].disable();
 	}
 
-	if (this.pillarLight)
+	if (this.backgroundLight)
 	{
 		this.lights[3].enable();
 	}
@@ -297,32 +299,29 @@ LightingScene.prototype.display = function()
 
 	// Floor
 	this.pushMatrix();
-	this.translate(7.5, 0, 7.5);
-	this.rotate(-90 * degToRad, 1, 0, 0);
-	this.scale(15, 15, 0.2);
+	this.translate(7.5, 0.0, 7.5);
+	this.rotate(Math.PI / 2, -1, 0, 0);
+	this.scale(15.0, 15.0, 0.2);
 	this.floorAppearance.apply();
 	this.floor.display();
 	this.popMatrix();
 
-	// impostor
+	// Left Wall
 	this.pushMatrix();
-	this.translate(-8.0, 4, 7.5);
-	this.rotate(90 * degToRad, 0, 1, 0);
-	this.scale(15, 8, 0.2);
-	this.windowAppearance.apply();
 	this.wallA.display();
 	this.popMatrix();
 
 	// Plane Wall
 	this.pushMatrix();
-	this.translate(7.5, 4, 0);
-	this.scale(15, 8, 0.2);
+	this.translate(7.5, 4.0, 0.0);
+	this.scale(15.0, 8.0, 0.2);
 	this.wallAppearance.apply();
 	this.wallB.display();
 	this.popMatrix();
 
 	if (this.drawBall)
 	{
+		// Soccer Ball
 		this.pushMatrix();
 		this.scale(0.6, 0.6, 0.6);
 		this.translate(6.0, 7.3, 13.0);
@@ -338,29 +337,36 @@ LightingScene.prototype.display = function()
 	{
 		// Left Chair #1
 		this.pushMatrix();
-		this.translate(12.5, 6.35, 8);
-		this.rotate(Math.PI / 1.3, 1, 0, -1);
+		this.translate(5.0, 0.0, 9.85);
+		this.rotate(Math.PI, 0, 1, 0);
 		this.chair.display();
 		this.popMatrix();
 
 		// Left Chair #2
 		this.pushMatrix();
-		this.translate(5.0, 0, 9.85);
-		this.rotate(Math.PI, 0, 1, 0);
+		this.translate(5.0, 0.0, 5.85);
 		this.chair.display();
 		this.popMatrix();
-
+		
 		// Right Chair
 		this.pushMatrix();
-		this.translate(5.0, 0, 5.85);
+		this.translate(12.5, 6.35, 8.0);
+		this.rotate(Math.PI / 1.3, 1, 0, -1);
 		this.chair.display();
 		this.popMatrix();
 	}
 
-	// Window Impostor
-	this.pushMatrix();
-	this.impostor.display();
-	this.popMatrix();
+	if (this.drawLandscape)
+	{
+		// Landscape Impostor
+		this.pushMatrix();
+		this.translate(-8.0, 4.0, 7.5);
+		this.rotate(Math.PI / 2, 0, 1, 0);
+		this.scale(15.0, 8.0, 0.2);
+		this.landscapeAppearance.apply();
+		this.impostor.display();
+		this.popMatrix();
+	}
 
 	if (this.drawTables)
 	{
@@ -379,19 +385,21 @@ LightingScene.prototype.display = function()
 
 	if (this.drawSlides)
 	{
+		// Slides Board
 		this.pushMatrix();
-		this.translate(4, 4.5, 0.2);
-		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
+		this.translate(4.0, 4.5, 0.2);
+		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1.0);
 		this.slidesAppearance.apply();
 		this.boardA.display();
 		this.popMatrix();
 	}
-
+	
 	if (this.drawBoard)
 	{
+		// White Board
 		this.pushMatrix();
 		this.translate(10.5, 4.5, 0.2);
-		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
+		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1.0);
 		this.boardAppearance.apply();
 		this.boardB.display();
 		this.popMatrix();
@@ -399,14 +407,16 @@ LightingScene.prototype.display = function()
 
 	if (this.drawClock)
 	{
+		// Clock
 		this.pushMatrix();
-		this.translate(7.25, 7.25, 0);
+		this.translate(7.25, 7.25, 0.0);
 		this.clock.display();
 		this.popMatrix();
 	}
 
 	if (this.drawRobot)
 	{
+		// Robot
 		this.pushMatrix();
 		this.robot.display();
 		this.popMatrix();
@@ -414,18 +424,18 @@ LightingScene.prototype.display = function()
 
 	if (this.drawColumns)
 	{
-		// left column
+		// Left Column
 		this.pushMatrix();
-		this.scale(1, 8, 1);
-		this.translate(2.5, 0, 12.5);
+		this.scale(1.0, 8.0, 1.0);
+		this.translate(2.5, 0.0, 12.5);
 		this.columnAppearance.apply();
 		this.cylinder.display();
 		this.popMatrix();
 
-		// right column
+		// Right Column
 		this.pushMatrix();
-		this.scale(1, 8, 1);
-		this.translate(12.5, 0, 12.5);
+		this.scale(1.0, 8.0, 1.0);
+		this.translate(12.5, 0.0, 12.5);
 		this.columnAppearance.apply();
 		this.cylinder.display();
 		this.popMatrix();

@@ -108,11 +108,6 @@ MyRobot.prototype.moveArms = function()
 
 MyRobot.prototype.move = function(dx, dz)
 {
-	if (this.robotGreet || this.robotJump)
-	{
-		return;
-	}
-
 	if (this.robotX + dx >= 0.5 && this.robotX + dx <= 15.0)
 	{
 		this.robotX += dx;
@@ -142,11 +137,6 @@ MyRobot.prototype.moveBackward = function()
 
 MyRobot.prototype.rotate = function(right)
 {
-	if (this.robotGreet || this.robotJump)
-	{
-		return;
-	}
-
 	if (right)
 	{
 		this.robotAngle -= this.smallIncrement;
@@ -187,11 +177,6 @@ MyRobot.prototype.rotateRightWheel = function(forward)
 
 MyRobot.prototype.jump = function()
 {
-	if (this.robotGreet)
-	{
-		return;
-	}
-
 	if (!this.robotJump)
 	{
 		this.leftArmAngle = 0.0;
