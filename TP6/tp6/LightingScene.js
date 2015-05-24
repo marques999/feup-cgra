@@ -59,7 +59,8 @@ LightingScene.prototype.init = function(application)
 	this.robotAppearanceFiles[2] = "../resources/images/robot_cyanogen.png";
 	this.currentRobot = 0;
 	this.previousRobot = -1;
-
+	this.firstPerson = 0;
+	
 	this.axis = new CGFaxis(this);
 	this.ball = new MySphere(this, 16, 16);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
@@ -145,17 +146,26 @@ LightingScene.prototype.initCameras = function()
 
 LightingScene.prototype.defaultView = function()
 {
-	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(30, 30, 30), vec3.fromValues(0, 0, 0));
+	this.camera.setPosition(vec3.fromValues(30, 30, 30));
+	this.camera.setTarget(vec3.fromValues(0, 0, 0));
 }
 
 LightingScene.prototype.frontView = function()
 {
-	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(7.5, 7.0, 25), vec3.fromValues(7.5, 2.0, 0));
+	this.camera.setPosition(vec3.fromValues(7.5, 7.0, 25.0));
+	this.camera.setTarget(vec3.fromValues(7.5, 2.0, 0.0));
 }
 
 LightingScene.prototype.topView = function()
 {
-	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(7.5, 50.0, 15.0), vec3.fromValues(7.5, 0.0, 7.5));
+	this.camera.setPosition(vec3.fromValues(7.5, 50.0, 15.0));
+	this.camera.setTarget(vec3.fromValues(7.5, 0.0, 7.5));
+}
+
+LightingScene.prototype.firstPersonView = function()
+{
+	this.camera.setPosition(vec3.fromValues(15.0, 5.0, 0.0));
+	this.firstPerson = 1;
 }
 
 LightingScene.prototype.initLights = function()
@@ -242,6 +252,11 @@ LightingScene.prototype.update = function(currTime)
 	}
 
 	this.robot.update();
+	
+	if (this.firstPerson)
+	{
+		this.camera.setTarget(this.robot.getPosition());
+	}
 
 	if (!this.clockPaused)
 	{

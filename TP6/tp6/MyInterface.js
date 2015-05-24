@@ -47,6 +47,7 @@ MyInterface.prototype.init = function(application)
 
 	groupRobot.open();
 	groupRobot.add(this.scene, 'currentRobot', this.scene.robotAppearanceList);
+	groupRobot.add(this.scene, 'followRobot');
 	groupRobot.add(this.scene, 'robotScale', 0.1, 5.0);
 	groupRobot.add(this.scene, 'armAmplitude', Math.PI / 6, Math.PI);
 

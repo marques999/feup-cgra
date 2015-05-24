@@ -10,6 +10,8 @@ function MyRobot(scene)
 	this.largeIncrement = Math.PI / 12;
 	this.robotJump = 0;
 	this.robotScale = 1.0;
+	this.cameraScale = 10.0 * this.robotScale;
+	this.cameraScaleY = 3.0 * this.robotScale;
 	this.robotSpeed = 0.2;
 
 	this.goForward = 0;
@@ -69,6 +71,16 @@ function MyRobot(scene)
 MyRobot.prototype = Object.create(CGFobject.prototype);
 MyRobot.prototype.constructor = MyRobot;
 
+MyRobot.prototype.getDirection = function()
+{
+	return vec3.fromValues(this.robotX, this.robotY + this.robotScale, this.robotZ);
+}
+
+MyRobot.prototype.getPosition = function()
+{
+	return vec3.fromValues(this.robotX + this.cameraScale * Math.sin(this.robotAngle), this.robotY + this.cameraScaleY, this.robotZ + this.cameraScale * Math.cos(this.robotAngle));
+}
+
 MyRobot.prototype.setAmplitude = function(ang)
 {
 	this.armAmplitude = ang;
@@ -77,6 +89,8 @@ MyRobot.prototype.setAmplitude = function(ang)
 MyRobot.prototype.setScale = function(amt)
 {
 	this.robotScale = amt;
+	this.cameraScale = 10 * this.robotScale;
+	this.cameraScaleY = 2.0 * this.robotScale;
 };
 
 MyRobot.prototype.setTexture = function(str)
