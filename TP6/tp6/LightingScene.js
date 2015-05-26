@@ -25,6 +25,8 @@ LightingScene.prototype.init = function(application)
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.enable(this.gl.BLEND);
+	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
 	this.clockPaused = false;
 	this.scenePaused = false;
@@ -60,7 +62,7 @@ LightingScene.prototype.init = function(application)
 	this.currentRobot = 0;
 	this.previousRobot = -1;
 	this.followRobot = false;
-	
+
 	this.axis = new CGFaxis(this);
 	this.ball = new MySphere(this, 16, 16);
 	this.boardA = new Plane(this, BOARD_A_DIVISIONS, -0.25, 1.25, 0.0, 1.0);
@@ -72,8 +74,8 @@ LightingScene.prototype.init = function(application)
 	this.robot = new MyRobot(this);
 	this.table = new MyTable(this);
 	this.impostor = new MyCircle(this, 12, 0.0, 1.0, 0.0, 1.0);
-	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
 	this.wallA = new MyImpostor(this);
+	this.wallB = new MyQuad(this, 0.0, 2.0, 0.0, 2.0);
 	this.materialDefault = new CGFappearance(this);
 
 	this.ballAppearance = new CGFappearance(this);
@@ -246,7 +248,7 @@ LightingScene.prototype.update = function(currTime)
 	}
 
 	this.robot.update();
-	
+
 	if (this.followRobot)
 	{
 		this.camera.setPosition(this.robot.getPosition());
@@ -316,10 +318,17 @@ LightingScene.prototype.display = function()
 	this.floor.display();
 	this.popMatrix();
 
-	// Left Wall
-	this.pushMatrix();
-	this.wallA.display();
-	this.popMatrix();
+	if (this.drawLandscape)
+	{
+		// Landscape Impostor
+		this.pushMatrix();
+		this.translate(-9.0, 4.0, 7.5);
+		this.rotate(Math.PI / 2, 0, 1, 0);
+		this.scale(15.0, 8.0, 0.2);
+		this.landscapeAppearance.apply();
+		this.impostor.display();
+		this.popMatrix();
+	}
 
 	// Plane Wall
 	this.pushMatrix();
@@ -363,18 +372,6 @@ LightingScene.prototype.display = function()
 		this.translate(12.5, 6.35, 8.0);
 		this.rotate(Math.PI / 1.3, 1, 0, -1);
 		this.chair.display();
-		this.popMatrix();
-	}
-
-	if (this.drawLandscape)
-	{
-		// Landscape Impostor
-		this.pushMatrix();
-		this.translate(-8.0, 4.0, 7.5);
-		this.rotate(Math.PI / 2, 0, 1, 0);
-		this.scale(15.0, 8.0, 0.2);
-		this.landscapeAppearance.apply();
-		this.impostor.display();
 		this.popMatrix();
 	}
 
@@ -451,5 +448,9 @@ LightingScene.prototype.display = function()
 		this.popMatrix();
 	}
 
+	// Left Wall
+	this.pushMatrix();
+	this.wallA.display();
+	this.popMatrix();
 	this.shader.unbind();
 };

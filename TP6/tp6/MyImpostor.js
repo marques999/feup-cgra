@@ -4,12 +4,12 @@ function MyImpostor(scene)
 
 	this.divisions =
 	[
-		new Plane(this.scene, 16, -1.0, 0.04, 0.04, 0.96),
+		new Plane(this.scene, 16, -1.0, 0.04, 0.01, 0.98),
 		new Plane(this.scene, 16, -0.89, 1.89, -0.5, 0.04),
-		new Plane(this.scene, 16, 0.96, 2.0, 0.05, 0.95),
-		new Plane(this.scene, 16, -0.89, 1.89, 0.95, 1.5),
-		new Plane(this.scene, 16, 0.04, 0.5, 0.04, 0.96),
-		new Plane(this.scene, 16, 0.5, 0.96, 0.0, 1.0)
+		new Plane(this.scene, 16, 0.96, 2.0, 0.01, 0.98),
+		new Plane(this.scene, 16, -0.89, 1.89, 0.96, 1.5),
+		new Plane(this.scene, 16, 0.0, 0.5, 0.01, 0.98),
+		new Plane(this.scene, 16, 0.5, 1.0, 0.01, 0.98)
 	];
 
 	this.divisions[0].initBuffers();
