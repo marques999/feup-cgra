@@ -23,7 +23,7 @@ function MyImpostor(scene)
 	this.impostorAppearance.setAmbient(0.3, 0.3, 0.3, 1.0);
 	this.impostorAppearance.setDiffuse(0.8, 0.8, 0.8, 1.0);
 	this.impostorAppearance.setSpecular(0.1, 0.1, 0.1, 1.0);
-	this.impostorAppearance.loadTexture("../resources/images/window.png");
+	this.impostorAppearance.loadTexture("../resources/images/window_new.png");
 	this.impostorAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 };
 
